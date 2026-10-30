@@ -45,3 +45,8 @@ create policy "viewers update own story views" on public.story_views for update 
 grant select,insert,delete on public.story_likes to authenticated;
 grant select,insert,delete on public.story_comments to authenticated;
 grant select,insert,update on public.story_views to authenticated;
+
+
+do $$ begin alter publication supabase_realtime add table public.story_likes; exception when duplicate_object then null; end $$;
+do $$ begin alter publication supabase_realtime add table public.story_comments; exception when duplicate_object then null; end $$;
+do $$ begin alter publication supabase_realtime add table public.story_views; exception when duplicate_object then null; end $$;
