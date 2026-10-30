@@ -8,6 +8,9 @@ create table if not exists public.message_requests(
  unique(sender_id,receiver_id),
  check(sender_id<>receiver_id)
 );
+alter table public.message_requests add column if not exists initial_message text;
+update public.message_requests set initial_message='Message request' where initial_message is null;
+alter table public.message_requests alter column initial_message set not null;
 alter table public.message_requests enable row level security;
 drop policy if exists "participants read message requests" on public.message_requests;
 create policy "participants read message requests" on public.message_requests for select to authenticated using(auth.uid()=sender_id or auth.uid()=receiver_id);
