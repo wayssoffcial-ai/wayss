@@ -34,3 +34,39 @@ with check (
     (r.sender_id=messages.receiver_id and r.receiver_id=messages.sender_id))
    and r.status='accepted')
 );
+
+-- Calls are available only to people whose message request was accepted.
+drop policy if exists "call participants access calls" on public.voice_video_calls;
+create policy "call participants access calls" on public.voice_video_calls
+for select to authenticated
+using (
+ (auth.uid()=caller_id or auth.uid()=callee_id)
+ and exists(select 1 from public.message_requests r where
+  ((r.sender_id=voice_video_calls.caller_id and r.receiver_id=voice_video_calls.callee_id) or
+   (r.sender_id=voice_video_calls.callee_id and r.receiver_id=voice_video_calls.caller_id))
+  and r.status='accepted')
+);
+drop policy if exists "caller starts calls" on public.voice_video_calls;
+create policy "caller starts calls" on public.voice_video_calls
+for insert to authenticated
+with check (
+ auth.uid()=caller_id
+ and not exists(select 1 from public.profile_blocks b where
+  (b.blocker_id=voice_video_calls.caller_id and b.blocked_id=voice_video_calls.callee_id) or
+  (b.blocker_id=voice_video_calls.callee_id and b.blocked_id=voice_video_calls.caller_id))
+ and exists(select 1 from public.message_requests r where
+  ((r.sender_id=voice_video_calls.caller_id and r.receiver_id=voice_video_calls.callee_id) or
+   (r.sender_id=voice_video_calls.callee_id and r.receiver_id=voice_video_calls.caller_id))
+  and r.status='accepted')
+);
+drop policy if exists "callee or caller updates calls" on public.voice_video_calls;
+create policy "callee or caller updates calls" on public.voice_video_calls
+for update to authenticated
+using (
+ (auth.uid()=caller_id or auth.uid()=callee_id)
+ and exists(select 1 from public.message_requests r where
+  ((r.sender_id=voice_video_calls.caller_id and r.receiver_id=voice_video_calls.callee_id) or
+   (r.sender_id=voice_video_calls.callee_id and r.receiver_id=voice_video_calls.caller_id))
+  and r.status='accepted')
+)
+with check (auth.uid()=caller_id or auth.uid()=callee_id);
