@@ -69,4 +69,10 @@ using (
    (r.sender_id=voice_video_calls.callee_id and r.receiver_id=voice_video_calls.caller_id))
   and r.status='accepted')
 )
-with check (auth.uid()=caller_id or auth.uid()=callee_id);
+with check (
+ (auth.uid()=caller_id or auth.uid()=callee_id)
+ and exists(select 1 from public.message_requests r where
+  ((r.sender_id=voice_video_calls.caller_id and r.receiver_id=voice_video_calls.callee_id) or
+   (r.sender_id=voice_video_calls.callee_id and r.receiver_id=voice_video_calls.caller_id))
+  and r.status='accepted')
+);
