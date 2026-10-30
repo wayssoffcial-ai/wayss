@@ -1,0 +1,12 @@
+import { useEffect, useState } from "react";
+import { supabase } from "../lib/supabase";
+import { Send } from "lucide-react";
+
+export default function Messages({userId}:{userId:string}) {
+  const [people,setPeople]=useState<any[]>([]);const [selected,setSelected]=useState<any>(null);const [messages,setMessages]=useState<any[]>([]);const [body,setBody]=useState("");
+  useEffect(()=>{supabase.from("follows").select("following:profiles!follows_following_id_fkey(id,username,display_name,avatar_url)").eq("follower_id",userId).then(({data})=>setPeople((data||[]).map(x=>x.following)));},[userId]);
+  const load=async(person:any)=>{setSelected(person);const {data}=await supabase.from("messages").select("*").or(`and(sender_id.eq.${userId},receiver_id.eq.${person.id}),and(sender_id.eq.${person.id},receiver_id.eq.${userId})`).order("created_at");setMessages(data||[]);};
+  useEffect(()=>{if(!selected)return;const channel=supabase.channel("messages-"+selected.id).on("postgres_changes",{event:"INSERT",schema:"public",table:"messages"},payload=>{const m=payload.new as any;if((m.sender_id===userId&&m.receiver_id===selected.id)||(m.sender_id===selected.id&&m.receiver_id===userId))setMessages(s=>[...s,m]);}).subscribe();return()=>{supabase.removeChannel(channel);};},[selected,userId]);
+  const send=async()=>{if(!body.trim()||!selected)return;const text=body.trim();setBody("");await supabase.from("messages").insert({sender_id:userId,receiver_id:selected.id,body:text});};
+  return <div className="page messages-page"><span className="eyebrow">PRIVATE CONVERSATIONS</span><h1>Msgs</h1><div className="messages-layout"><aside>{people.map(p=><button className={selected?.id===p.id?"person-row selected":"person-row"} key={p.id} onClick={()=>load(p)}><img className="avatar sm" src={p.avatar_url||"/avatar.svg"}/><b>{p.display_name||p.username}</b></button>)}{people.length===0&&<p className="muted">Follow someone to start a conversation.</p>}</aside><div className="chat-panel">{selected?<><div className="chat-title">{selected.display_name||selected.username}</div><div className="chat-messages">{messages.map(m=><div key={m.id} className={m.sender_id===userId?"bubble mine":"bubble"}>{m.body}</div>)}</div><div className="chat-compose"><input value={body} onChange={e=>setBody(e.target.value)} onKeyDown={e=>e.key==="Enter"&&send()} placeholder="Write a message..."/><button onClick={send}><Send/></button></div></>:<div className="empty-state">Choose a conversation to begin.</div>}</div></div></div>;
+}
