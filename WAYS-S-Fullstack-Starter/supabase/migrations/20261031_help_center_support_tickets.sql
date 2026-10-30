@@ -19,7 +19,7 @@ create table if not exists public.support_tickets (
 );
 alter table public.support_tickets enable row level security;
 drop policy if exists "Users create own support tickets" on public.support_tickets;
-create policy "Users create own support tickets" on public.support_tickets for insert to authenticated with check ((select auth.uid()) = user_id);
+create policy "Users create own support tickets" on public.support_tickets for insert to authenticated with check ((select auth.uid()) = user_id and (screenshot_path is null or screenshot_path like ((select auth.uid())::text || '/%')));
 drop policy if exists "Users view own support tickets" on public.support_tickets;
 create policy "Users view own support tickets" on public.support_tickets for select to authenticated using ((select auth.uid()) = user_id or public.is_wayss_admin());
 drop policy if exists "Admins update support tickets" on public.support_tickets;
