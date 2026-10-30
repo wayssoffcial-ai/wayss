@@ -274,7 +274,7 @@ export default function Profile({ userId }: { userId: string }) {
 
     {aboutOpen && <div className="modal-backdrop" onMouseDown={(e) => { if (e.target === e.currentTarget) setAboutOpen(false); }}><div className="modal form-stack">
       <div className="modal-head"><h2>About this account</h2><button onClick={() => setAboutOpen(false)} aria-label="Close"><X/></button></div>
-      <div className="about-account-mark"><ShieldCheck/></div><p><b>@{profile.username}</b></p><p className="muted">Joined WAYS S {new Date(profile.created_at).toLocaleDateString(undefined, { month: "long", year: "numeric" })}</p><p className="muted">Account visibility: {profile.is_private ? "Private" : "Public"}</p>
+      <div className="about-account-mark"><ShieldCheck/></div><p><b>@{profile.username}</b></p><p className="muted">Joined WAYS S {new Date(profile.created_at || new Date().toISOString()).toLocaleDateString(undefined, { month: "long", year: "numeric" })}</p><p className="muted">Account visibility: {profile.is_private ? "Private" : "Public"}</p>
       <button className="secondary-btn" onClick={() => setAboutOpen(false)}>Close</button>
     </div></div>}
 
