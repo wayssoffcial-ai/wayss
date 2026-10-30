@@ -4,6 +4,7 @@ import { supabase, Profile as ProfileType, Post } from "../lib/supabase";
 import { uploadMedia } from "../lib/api";
 import PostCard from "../components/PostCard";
 import FollowList from "../components/FollowList";
+import FollowRequests from "../components/FollowRequests";
 import {
   MoreHorizontal, MapPin, Plus, Settings as SettingsIcon, Share2, Flag, Lock,
   Pencil, Trash2, Globe, Check, X, ExternalLink, ImagePlus, UserRound, Link2,
@@ -27,6 +28,7 @@ export default function Profile({ userId }: { userId: string }) {
   const [sections, setSections] = useState<Section[]>([]);
   const [posts, setPosts] = useState<Post[]>([]);
   const [followList, setFollowList] = useState<"followers"|"following"|null>(null);
+  const [requestsOpen,setRequestsOpen]=useState(false);
   const [followers, setFollowers] = useState(0);
   const [following, setFollowing] = useState(0);
   const [isFollowing, setIsFollowing] = useState(false);
@@ -199,6 +201,7 @@ export default function Profile({ userId }: { userId: string }) {
         {own ? <>
           <button onClick={() => { setMenu(false); setEditing(true); }}><Pencil/> Edit profile</button>
           <button onClick={() => { setMenu(false); resetSectionForm(); setSectionOpen(true); }}><Plus/> Add bio / custom section</button>
+          <button onClick={() => { setMenu(false); setRequestsOpen(true); }}><UserRound/> Follow requests</button>
           <button onClick={() => { setMenu(false); navigate("/settings"); }}><SettingsIcon/> Settings</button>
           <button onClick={() => { setMenu(false); setAboutOpen(true); }}><ShieldCheck/> About this account</button>
           <button onClick={shareProfile}><Share2/> Share profile</button>
@@ -239,6 +242,7 @@ export default function Profile({ userId }: { userId: string }) {
       <div className="profile-privacy-label">{profile.is_private ? <><Lock size={13}/> Private account</> : <><Globe size={13}/> Public account</>}</div>
     </div>
 
+    {requestsOpen && <FollowRequests userId={userId} onClose={() => setRequestsOpen(false)}/>}
     {followList && <FollowList userId={target} kind={followList} onClose={() => setFollowList(null)}/>}
 
     {editing && <div className="modal-backdrop" onMouseDown={(e) => { if (e.target === e.currentTarget) setEditing(false); }}>
