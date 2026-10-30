@@ -98,3 +98,23 @@
  .feed-page .page-heading h1{font-size:27px}
 }
 @media(prefers-reduced-motion:reduce){.quick-fullbar,.quick-create-popover,.quick-logo{animation:none!important}}
+
+
+/* Followers / Following modal and verification marks */
+.stats>button{appearance:none;border:0;background:transparent;color:inherit;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:0 10px}
+.stats>button:hover b{color:#F32950}
+.follow-list-backdrop{z-index:150}
+.follow-list-modal{width:min(460px,calc(100vw - 28px));max-height:min(78vh,680px);overflow:auto}
+.follow-list-items{display:grid;gap:7px}
+.follow-list-person{width:100%;display:flex;align-items:center;gap:12px;text-align:left;padding:10px;border:1px solid #ffffff12;border-radius:16px;background:#ffffff06;color:#F5F5F7;cursor:pointer}
+.follow-list-person:hover{background:#10263b80;border-color:#F3295055}
+.follow-list-person>img{width:46px;height:46px;object-fit:cover;border-radius:50%;border:1px solid #ffffff28}
+.follow-list-copy{display:grid;gap:4px;min-width:0;flex:1}
+.follow-list-copy b{display:flex;align-items:center;gap:5px;font-size:13px}
+.follow-list-copy small{color:#9296A3;font-size:12px}
+.follow-list-open{font-size:11px;color:#55AAFF}
+.verified-badge{width:16px;height:16px;color:#55AAFF;vertical-align:middle;flex-shrink:0}
+.profile-verified{width:21px;height:21px}
+.ways-verified-badge{display:inline-grid;place-items:center;width:17px;height:17px;border-radius:6px;background:linear-gradient(140deg,#F32950,#a80d34);color:white;font-size:10px;font-weight:900;vertical-align:middle;box-shadow:0 0 12px #F3295040}
+.profile-ways-badge{width:21px;height:21px;font-size:12px}
+@media(max-width:600px){.follow-list-modal{padding:18px}.follow-list-person{padding:9px}.follow-list-person>img{width:42px;height:42px}}
