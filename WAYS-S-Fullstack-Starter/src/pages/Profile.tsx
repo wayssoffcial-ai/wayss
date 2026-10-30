@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { supabase, Profile as ProfileType, Post } from "../lib/supabase";
 import { uploadMedia } from "../lib/api";
 import PostCard from "../components/PostCard";
+import FollowList from "../components/FollowList";
 import {
   MoreHorizontal, MapPin, Plus, Settings as SettingsIcon, Share2, Flag, Lock,
   Pencil, Trash2, Globe, Check, X, ExternalLink, ImagePlus, UserRound, Link2,
@@ -25,6 +26,7 @@ export default function Profile({ userId }: { userId: string }) {
   const [profile, setProfile] = useState<ProfileType | null>(null);
   const [sections, setSections] = useState<Section[]>([]);
   const [posts, setPosts] = useState<Post[]>([]);
+  const [followList, setFollowList] = useState<"followers"|"following"|null>(null);
   const [followers, setFollowers] = useState(0);
   const [following, setFollowing] = useState(0);
   const [isFollowing, setIsFollowing] = useState(false);
@@ -216,7 +218,7 @@ export default function Profile({ userId }: { userId: string }) {
           {own && <label className="avatar-edit" title="Change profile photo"><ImagePlus size={14}/><input type="file" accept="image/*" onChange={(e) => { changeImage(e.target.files?.[0] || null, "avatar_url"); e.currentTarget.value = ""; }}/></label>}
         </div>
         <div className="profile-actions">
-          {own ? <button className="secondary-btn" onClick={() => setEditing(true)}><Pencil size={15}/> Edit profile</button> : <>
+          {own ? null : <>
             <button className={isFollowing ? "secondary-btn" : "primary-btn"} disabled={busy || requestPending || blocked} onClick={toggleFollow}>
               {blocked ? "Unavailable" : isFollowing ? "Following" : requestPending ? "Requested" : profile.is_private ? "Request to follow" : "Follow"}
             </button>
@@ -224,18 +226,20 @@ export default function Profile({ userId }: { userId: string }) {
           </>}
         </div>
       </div>
-      <h1>{profile.display_name}</h1>
-      <p className="muted profile-handle">@{profile.username}</p>
+      <h1>{profile.display_name} {profile.is_verified && <ShieldCheck className="verified-badge profile-verified" aria-label="Verified account"/>} {profile.ways_verified && <span className="ways-verified-badge profile-ways-badge">W</span>}</h1>
+      <p className="muted profile-handle">@{profile.username} {profile.is_verified && <ShieldCheck className="verified-badge" aria-label="Verified"/>} {profile.ways_verified && <span className="ways-verified-badge">W</span>}</p>
       {profile.identity_line && <p className="identity">{profile.identity_line}</p>}
       {profile.bio && <p className="profile-bio">{profile.bio}</p>}
       <div className="stats">
         <div><b>{posts.length}</b><small>Posts</small></div>
-        <div><b>{followers}</b><small>Followers</small></div>
-        <div><b>{following}</b><small>Following</small></div>
+        <button type="button" onClick={() => setFollowList("followers")}><b>{followers}</b><small>Followers</small></button>
+        <button type="button" onClick={() => setFollowList("following")}><b>{following}</b><small>Following</small></button>
       </div>
       {profile.website && <a className="external-link" href={validUrl(profile.website) ? profile.website : "https://" + profile.website} target="_blank" rel="noopener noreferrer"><Link2 size={14}/>{profile.website}<ExternalLink size={12}/></a>}
       <div className="profile-privacy-label">{profile.is_private ? <><Lock size={13}/> Private account</> : <><Globe size={13}/> Public account</>}</div>
     </div>
+
+    {followList && <FollowList userId={target} kind={followList} onClose={() => setFollowList(null)}/>}
 
     {editing && <div className="modal-backdrop" onMouseDown={(e) => { if (e.target === e.currentTarget) setEditing(false); }}>
       <form className="modal form-stack profile-editor" onSubmit={saveProfile}>
