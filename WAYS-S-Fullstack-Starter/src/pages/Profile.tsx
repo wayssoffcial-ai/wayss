@@ -6,7 +6,7 @@ import PostCard from "../components/PostCard";
 import FollowList from "../components/FollowList";
 import FollowRequests from "../components/FollowRequests";
 import {
-  MoreHorizontal, MapPin, Plus, Settings as SettingsIcon, Share2, Flag, Lock,
+  MoreHorizontal, ArrowLeft, MapPin, Plus, Settings as SettingsIcon, Share2, Flag, Lock,
   Pencil, Trash2, Globe, Check, X, ExternalLink, ImagePlus, UserRound, Link2,
   ShieldCheck, UserX, FileText
 } from "lucide-react";
@@ -37,6 +37,7 @@ export default function Profile({ userId }: { userId: string }) {
   const [editing, setEditing] = useState(false);
   const [sectionOpen, setSectionOpen] = useState(false);
   const [menu, setMenu] = useState(false);
+  const [viewingPosts, setViewingPosts] = useState(false);
   const [aboutOpen, setAboutOpen] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -84,7 +85,7 @@ export default function Profile({ userId }: { userId: string }) {
     setBlocked(!!block);
   };
 
-  useEffect(() => { setProfile(null); setMenu(false); load(); }, [target, userId]);
+  useEffect(() => { setProfile(null); setMenu(false); setViewingPosts(false); load(); }, [target, userId]);
   const locked = !!profile?.is_private && !own && !isFollowing;
   const initials = useMemo(() => (profile?.display_name || "W").slice(0, 1).toUpperCase(), [profile?.display_name]);
 
@@ -196,7 +197,7 @@ export default function Profile({ userId }: { userId: string }) {
     <div className="profile-cover" style={{ backgroundImage: `linear-gradient(0deg,#08090D 0%,#08090D33 58%,#08090D22 100%),url(${profile.cover_url || ""})` }}>
       <button className="menu-trigger" aria-label="Profile menu" aria-expanded={menu} onClick={() => setMenu(!menu)}><MoreHorizontal/></button>
       {menu && <div className="profile-menu">
-        <button onClick={() => { setMenu(false); document.getElementById("profile-posts")?.scrollIntoView({ behavior: "smooth" }); }}><FileText/> View posts</button>
+        <button onClick={() => { setMenu(false); setViewingPosts(true); }}><FileText/> View posts</button>
         {own ? <>
           <button onClick={() => { setMenu(false); setEditing(true); }}><Pencil/> Edit profile</button>
           <button onClick={() => { setMenu(false); resetSectionForm(); setSectionOpen(true); }}><Plus/> Add bio / custom section</button>
@@ -288,15 +289,20 @@ export default function Profile({ userId }: { userId: string }) {
     {blocked ? <div className="private-state"><UserX/><h2>You blocked this account</h2><p>Unblock them to view their profile.</p><button className="secondary-btn" onClick={async () => { const { error: e } = await supabase.from("profile_blocks").delete().eq("blocker_id", userId).eq("blocked_id", target); if (e) setError(e.message); else { setBlocked(false); setNotice("Account unblocked."); } }}>Unblock</button></div>
     : locked ? <div className="private-state"><Lock/><h2>This account is private</h2><p>Send a follow request to see their posts and profile sections.</p>{requestPending && <span className="request-status"><Check size={14}/> Follow request pending</span>}</div>
     : <>
-      <div className="section-list">
+      {viewingPosts ? <>
+        <div className="profile-posts-heading">
+          <button className="secondary-btn" onClick={() => setViewingPosts(false)}><ArrowLeft size={16}/> Back to profile</button>
+          <h2 className="subheading">Posts & creations</h2>
+        </div>
+        <div id="profile-posts"><div className="feed-list">{posts.length ? posts.map((p) => <PostCard key={p.id} post={p} userId={userId}/>) : <div className="empty-state"><FileText size={28}/><h2>No posts yet</h2><p>When this user shares something, it will appear here.</p></div>}</div></div>
+      </> : <div className="section-list">
         {sections.map((s) => <section className="custom-section" style={{ borderLeftColor: s.color }} key={s.id}>
-          <div className="section-title"><h2>{s.title}</h2>{own && <div className="section-controls"><button aria-label="Edit section" onClick={() => startEdit(s)}><Pencil size={15}/></button><button aria-label="Delete section" onClick={() => removeSection(s.id)}><Trash2 size={15}/></button></div>}</div>
+          <div className="section-title"><h2>{s.title}</h2>{own && <div className="section-controls"><button aria-label="Edit section" onClick={() => startEdit(s)}><Pencil size={15}/></button><button aria-label="Delete section" onClick={() => removeSection(s.id)}><Trash2 size={14}/></button></div>}</div>
           {s.description && <p>{s.description}</p>}
           {(Array.isArray(s.links) ? s.links : []).map((l, i) => <a className="pin-link" key={i} href={validUrl(l.url) ? l.url : "#"} target="_blank" rel="noopener noreferrer"><MapPin size={14}/>{l.label} <ExternalLink size={12}/></a>)}
         </section>)}
         {own && <button className="add-section" onClick={() => { resetSectionForm(); setSectionOpen(true); }}><Plus/> Add custom section</button>}
-      </div>
-      <div id="profile-posts"><h2 className="subheading">Posts & creations</h2><div className="feed-list">{posts.length ? posts.map((p) => <PostCard key={p.id} post={p} userId={userId}/>) : <div className="empty-state"><FileText size={28}/><h2>No posts yet</h2><p>When this user shares something, it will appear here.</p></div>}</div></div>
+      </div>}
     </>}
   </div>;
 }
