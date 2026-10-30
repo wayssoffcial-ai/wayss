@@ -91,3 +91,14 @@ revoke all on function public.wayss_seed_accepted_request_message() from public,
 drop trigger if exists wayss_seed_request_message on public.message_requests;
 create trigger wayss_seed_request_message after update of status on public.message_requests
 for each row execute procedure public.wayss_seed_accepted_request_message();
+
+-- A blocked account cannot send or receive a first-contact request.
+drop policy if exists "sender creates message requests" on public.message_requests;
+create policy "sender creates message requests" on public.message_requests
+for insert to authenticated
+with check (
+ auth.uid()=sender_id and status='pending'
+ and not exists(select 1 from public.profile_blocks b where
+  (b.blocker_id=message_requests.sender_id and b.blocked_id=message_requests.receiver_id) or
+  (b.blocker_id=message_requests.receiver_id and b.blocked_id=message_requests.sender_id))
+);
