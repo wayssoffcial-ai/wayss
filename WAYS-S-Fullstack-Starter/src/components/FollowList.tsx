@@ -10,7 +10,7 @@ export default function FollowList({ userId, kind, onClose }: { userId:string; k
  useEffect(()=>{let active=true;(async()=>{
   const column=kind==="followers"?"follower_id":"following_id";
   const relation=kind==="followers"?"follower:profiles!follows_follower_id_fkey(id,username,display_name,avatar_url,is_verified,ways_verified)":"following:profiles!follows_following_id_fkey(id,username,display_name,avatar_url,is_verified,ways_verified)";
-  const {data,error}=await supabase.from("follows").select(relation).eq("following_id",kind==="followers"?userId:userId).order("created_at",{ascending:false});
+  const {data,error}=await supabase.from("follows").select(relation).eq(kind==="followers"?"following_id":"follower_id",userId).order("created_at",{ascending:false});
   if(!active)return;
   if(error){setError(error.message);setPeople([]);}else setPeople((data||[]).map((row:any)=>row[kind==="followers"?"follower":"following"]).filter(Boolean));
   setLoading(false);
