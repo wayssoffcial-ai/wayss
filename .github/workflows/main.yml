@@ -1,5 +1,6 @@
 name: WAYS S Web Build
 
+# Rebuild after Supabase GitHub Actions secrets are configured.
 on:
   push:
     branches:
