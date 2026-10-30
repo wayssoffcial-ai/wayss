@@ -6,7 +6,7 @@ import { uploadChatMedia,signChatMedia } from "../lib/api";
 import CallPanel from "../components/CallPanel";
 
 type Person={id:string;username:string;display_name:string;avatar_url:string|null};
-type Message={id:string;sender_id:string;receiver_id:string;body:string|null;media_url?:string|null;message_type?:string;read_at?:string|null;created_at:string;edited_at?:string|null;reply_to?:string|null;is_pinned?:boolean;reactions?:Record<string,string[]>};\ntype ChatPref={peer_id:string;is_starred:boolean;is_muted:boolean;is_archived:boolean;is_hidden:boolean;mark_unread:boolean;theme:string;accent_color:string;quick_reaction:string;nickname:string|null;read_receipts:boolean;disappearing_seconds:number|null};
+type Message={id:string;sender_id:string;receiver_id:string;body:string|null;media_url?:string|null;message_type?:string;read_at?:string|null;created_at:string;edited_at?:string|null;reply_to?:string|null;is_pinned?:boolean;reactions?:Record<string,string[]>;expires_at?:string|null};\ntype ChatPref={peer_id:string;is_starred:boolean;is_muted:boolean;is_archived:boolean;is_hidden:boolean;mark_unread:boolean;theme:string;accent_color:string;quick_reaction:string;nickname:string|null;read_receipts:boolean;disappearing_seconds:number|null};
 type RequestRow={id:string;sender_id:string;receiver_id:string;initial_message:string|null;status:string;created_at:string};
 export default function Messages({userId}:{userId:string}) {
  const [params]=useSearchParams();
