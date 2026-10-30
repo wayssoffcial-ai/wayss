@@ -13,7 +13,7 @@ export const supabase = createClient(
 export type Profile = {
   id: string; username: string; display_name: string; bio: string | null;
   avatar_url: string | null; cover_url: string | null; identity_line: string | null;
-  is_private: boolean; website: string | null;
+  is_private: boolean; website: string | null; created_at?: string;
 };
 export type Post = {
   id: string; user_id: string; caption: string | null; media_url: string | null;
