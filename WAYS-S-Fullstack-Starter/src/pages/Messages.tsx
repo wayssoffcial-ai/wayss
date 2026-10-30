@@ -17,7 +17,7 @@ export default function Messages({userId}:{userId:string}) {
  const [requests,setRequests]=useState<{request:RequestRow;person:Person}[]>([]);const [activeRequest,setActiveRequest]=useState<{request:RequestRow;person:Person}|null>(null);
  const [messages,setMessages]=useState<Message[]>([]);const [body,setBody]=useState("");const [busy,setBusy]=useState(false);
  const [error,setError]=useState("");const [notice,setNotice]=useState("");const [callType,setCallType]=useState<"voice"|"video"|null>(null);
- const [inboxTab,setInboxTab]=useState<"general"|"requests"|"hidden">(params.get("tab")==="requests"?"requests":"general");
+ const [inboxTab,setInboxTab]=useState<"general"|"requests"|"hidden"|"groups">(params.get("tab")==="requests"?"requests":"general");
  const [search,setSearch]=useState("");const [unreadOnly,setUnreadOnly]=useState(false);const [starredOnly,setStarredOnly]=useState(false);
  const [prefs,setPrefs]=useState<ChatPref[]>([]);const [chatMenu,setChatMenu]=useState(false);const [replyTo,setReplyTo]=useState<Message|null>(null);const [editing,setEditing]=useState<Message|null>(null);
  const [profileSearch,setProfileSearch]=useState("");const [profileResults,setProfileResults]=useState<Person[]>([]);const [showNew,setShowNew]=useState(false);
