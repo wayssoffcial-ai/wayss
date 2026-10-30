@@ -3,6 +3,7 @@ create table if not exists public.message_requests(
  sender_id uuid not null references public.profiles(id) on delete cascade,
  receiver_id uuid not null references public.profiles(id) on delete cascade,
  status text not null default 'pending' check(status in ('pending','accepted','declined')),
+ initial_message text not null check(char_length(initial_message) between 1 and 1000),
  created_at timestamptz not null default now(),
  unique(sender_id,receiver_id),
  check(sender_id<>receiver_id)
