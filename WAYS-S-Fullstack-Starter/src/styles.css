@@ -178,3 +178,20 @@
 .chat-compose>input:not([type=file]){min-width:0;flex:1}
 .chat-attach{flex-shrink:0;cursor:pointer}
 @media(max-width:650px){.messages-layout{display:block}.messages-layout aside,.messages-layout .chat-panel{min-height:60vh}.messages-layout .mobile-hidden{display:none}.chat-title-actions{gap:3px}.chat-title-actions button{width:32px;height:32px}.chat-back{width:30px;height:32px;border:0;background:transparent}}
+
+
+.call-overlay{position:fixed;inset:0;z-index:500;background:#02040af2;display:grid;place-items:center;padding:14px;backdrop-filter:blur(18px)}
+.call-card{width:min(520px,100%);max-height:94vh;overflow:auto;padding:18px;border:1px solid #ffffff25;border-radius:26px;background:linear-gradient(145deg,#142235,#08090D);box-shadow:0 25px 90px #000b;display:grid;gap:14px}
+.call-card>header{display:flex;align-items:center;justify-content:space-between}
+.call-card>header h2{margin:4px 0;font-size:20px}.call-card>header small{color:#a7b3c4}
+.call-card>header button{width:36px;height:36px;border:1px solid #ffffff20;border-radius:12px;background:#ffffff0c;color:white}
+.remote-video{width:100%;max-height:52vh;min-height:220px;object-fit:contain;border-radius:18px;background:#02040a}
+.remote-video.audio-only{min-height:180px;background:radial-gradient(circle,#10263B,#08090D 70%)}
+.call-controls{display:flex;justify-content:center;gap:14px}
+.call-controls button{width:48px;height:48px;border-radius:50%;border:1px solid #ffffff20;background:#ffffff12;color:#fff;display:grid;place-items:center}
+.call-controls .hangup{background:#F32950;border-color:#F32950}
+.incoming-call{display:grid;justify-items:center;gap:14px;padding:30px 10px}
+.incoming-call img{width:90px;height:90px;border-radius:50%;object-fit:cover}
+.incoming-call>div{display:flex;gap:12px}
+.record-controls{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+@media(max-width:600px){.call-card{padding:13px;border-radius:20px}.remote-video{min-height:190px}}
