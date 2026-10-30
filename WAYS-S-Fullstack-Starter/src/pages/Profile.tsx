@@ -194,7 +194,6 @@ export default function Profile({ userId }: { userId: string }) {
     {notice && <div className="profile-notice" role="status"><Check size={15}/>{notice}<button onClick={() => setNotice("")} aria-label="Dismiss"><X size={14}/></button></div>}
     {error && <div className="profile-error" role="alert">{error}<button onClick={() => setError("")}>Dismiss</button></div>}
     <div className="profile-cover" style={{ backgroundImage: `linear-gradient(0deg,#08090D 0%,#08090D33 58%,#08090D22 100%),url(${profile.cover_url || ""})` }}>
-      {own && <label className="cover-edit" title="Change cover photo"><ImagePlus size={14}/><input aria-label="Change cover photo" type="file" accept="image/*" onChange={(e) => { changeImage(e.target.files?.[0] || null, "cover_url"); e.currentTarget.value = ""; }}/></label>}
       <button className="menu-trigger" aria-label="Profile menu" aria-expanded={menu} onClick={() => setMenu(!menu)}><MoreHorizontal/></button>
       {menu && <div className="profile-menu">
         <button onClick={() => { setMenu(false); document.getElementById("profile-posts")?.scrollIntoView({ behavior: "smooth" }); }}><FileText/> View posts</button>
