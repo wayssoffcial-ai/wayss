@@ -7,7 +7,8 @@ type StoryComment={id:string;story_id:string;user_id:string;body:string;created_
 type StoryView={user_id:string;viewed_at:string;profile?:{username:string;display_name:string;avatar_url:string|null}[]};
 export default function StoryBar({userId}:{userId:string}){
  const [stories,setStories]=useState<Story[]>([]),[viewer,setViewer]=useState<Story|null>(null),[busy,setBusy]=useState(false),[error,setError]=useState("");
- const [liked,setLiked]=useState(false),[likes,setLikes]=useState(0),[comments,setComments]=useState<StoryComment[]>([]),[comment,setComment]=useState("");\n const [storySequence,setStorySequence]=useState<Story[]>([]),[storyIndex,setStoryIndex]=useState(0);
+ const [liked,setLiked]=useState(false),[likes,setLikes]=useState(0),[comments,setComments]=useState<StoryComment[]>([]),[comment,setComment]=useState("");
+ const [storySequence,setStorySequence]=useState<Story[]>([]),[storyIndex,setStoryIndex]=useState(0);
  const [views,setViews]=useState<StoryView[]>([]),[showViews,setShowViews]=useState(false);
  const file=useRef<HTMLInputElement>(null);
  const load=useCallback(async()=>{const {data:f}=await supabase.from("follows").select("following_id").eq("follower_id",userId);const ids=[userId,...(f||[]).map(x=>x.following_id)];const {data}=await supabase.from("stories").select("*,profile:profiles!stories_user_id_fkey(id,username,display_name,avatar_url,is_verified,ways_verified)").in("user_id",ids).gt("expires_at",new Date().toISOString()).order("created_at",{ascending:false});setStories((data||[]) as Story[]);},[userId]);
