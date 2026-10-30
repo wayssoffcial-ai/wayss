@@ -228,3 +228,5 @@
 .request-row>small{width:100%;padding-left:54px;color:#9296A3}
 .request-row>button{border:1px solid #F32950;border-radius:10px;background:#F32950;color:white;padding:7px 10px;font-size:11px;cursor:pointer}
 .request-row>button.secondary-btn{background:#ffffff0a;border-color:#ffffff25;color:#d8dce5}
+
+.notification-nav{position:relative}.nav-unread-count{position:absolute;top:-7px;right:-9px;min-width:17px;height:17px;padding:0 4px;border-radius:20px;background:#F32950;color:white;font-size:9px;font-style:normal;font-weight:800;display:grid;place-items:center;border:2px solid #08090D}
