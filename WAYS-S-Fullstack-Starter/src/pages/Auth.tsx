@@ -39,7 +39,15 @@ export default function Auth() {
     const {data,error}=await supabase.auth.signInWithPassword({email,password});if(error)throw error;
     if(data.user){await ensureProfile(data.user);nav("/");}
    }
-  }catch(err){setError(err instanceof Error?err.message:"Something went wrong");}
+  }catch(err){
+   const raw=err instanceof Error?err.message:"Something went wrong";
+   const lower=raw.toLowerCase();
+   if(lower.includes("over_email_send_rate_limit")||lower.includes("email rate limit")||lower.includes("too many requests")){
+    setError("Email sending limit reached. Please wait before requesting another confirmation email. WAYS S email verification is temporarily limited by the email provider; try again later or contact support.");
+   }else if(lower.includes("user already registered"))setError("This email already has an account. Sign in or use Forgot password.");
+   else if(lower.includes("invalid email"))setError("Please enter a valid email address.");
+   else setError(raw);
+  }
   finally{setBusy(false);}
  };
  const google=async()=>{const {error}=await supabase.auth.signInWithOAuth({provider:"google",options:{redirectTo:window.location.origin}});if(error)setError(error.message);};
