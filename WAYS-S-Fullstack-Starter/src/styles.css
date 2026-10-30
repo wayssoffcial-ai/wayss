@@ -440,3 +440,6 @@ body{min-height:100%;height:auto;overflow-x:hidden;overflow-y:auto;overscroll-be
 .call-card>.muted{font-size:11px;text-align:center;line-height:1.5}
 @keyframes callPulse{50%{transform:scale(1.07);box-shadow:0 0 0 20px #f3295008}}
 @media(max-width:600px){.call-overlay{padding:10px;align-items:center}.call-card{padding:18px;border-radius:22px}.remote-video{min-height:180px}.settings-page{padding-bottom:calc(170px + env(safe-area-inset-bottom))}}
+
+/* Allow normal upward and downward feed scrolling on touch devices. */
+.feed-pull-zone{touch-action:pan-x pan-y!important}
