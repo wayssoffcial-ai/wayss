@@ -1,6 +1,7 @@
 import { useCallback,useEffect,useState } from "react";
 import { supabase } from "../lib/supabase";
-import { Lock,Globe,LogOut,ShieldCheck,ChevronRight,Palette,Layers,KeyRound,UserCheck,ShieldAlert,Check,X,RefreshCw } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Lock,Globe,LogOut,ShieldCheck,ChevronRight,Palette,Layers,KeyRound,UserCheck,ShieldAlert,Check,X,RefreshCw,Activity,Bell,HelpCircle } from "lucide-react";
 
 type Verification={id:string;user_id:string;request_type:string;details:string;status:string;created_at:string;profile?:any};
 type Report={id:string;reporter_id:string;reported_id:string;reason:string;status:string;created_at:string};
@@ -43,6 +44,9 @@ export default function Settings({userId}:{userId:string}) {
    <h3>Post reports ({postReports.length})</h3>{postReports.map(r=><div className="panel admin-row" key={r.id}><b>Reported post {r.post_id}</b><small>{r.reason}</small><div><button className="secondary-btn compact" onClick={()=>postReportAction(r.id,"reviewing")}>Review</button><button className="primary-btn compact" onClick={()=>postReportAction(r.id,"resolved")}>Resolve</button><button className="secondary-btn compact" onClick={()=>postReportAction(r.id,"dismissed")}>Dismiss</button></div></div>)}{!postReports.length&&<p className="muted">No open post reports.</p>}
    <h3>Manage users</h3><input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search username or display name"/>{filtered.map(m=><div className="panel admin-row" key={m.id}><b>@{m.username} · {m.display_name}</b><small>{m.account_status||"active"} {m.is_verified?"· Verified":""} {m.ways_verified?"· WAYS badge":""}</small><div><button className="secondary-btn compact" onClick={()=>memberAction(m,m.account_status==="suspended"?"activate":"suspend")}>{m.account_status==="suspended"?"Reactivate":"Suspend"}</button><button className="secondary-btn compact" onClick={()=>memberAction(m,m.is_verified?"unverify":"verify")}>{m.is_verified?"Unverify":"Verify"}</button><button className="secondary-btn compact" onClick={()=>memberAction(m,m.ways_verified?"unways":"ways")}>{m.ways_verified?"Remove WAYS":"WAYS badge"}</button></div></div>)}
   </section>}
+  <section className="settings-group"><div className="settings-group-title"><Activity size={16}/> Your activity</div><Link className="panel settings-signout" to="/profile"><span><b>Posts & profile activity</b><small>Review your profile and published posts</small></span><ChevronRight size={18}/></Link></section>
+  <section className="settings-group"><div className="settings-group-title"><Bell size={16}/> Notifications</div><Link className="panel settings-signout" to="/notifications"><span><b>Notification centre</b><small>Likes, comments, follows and message requests</small></span><ChevronRight size={18}/></Link></section>
+  <section className="settings-group"><div className="settings-group-title"><HelpCircle size={16}/> Help & about</div><div className="panel settings-row"><div className="settings-row-copy"><h3>WAYS S</h3><p className="muted">Your world. Your orbit. Keep your account safe and your community respectful.</p><small className="muted">WAYS S social platform</small></div></div></section>
   <section className="settings-group"><div className="settings-group-title"><LogOut size={16}/> Session</div><button className="panel settings-signout" onClick={()=>supabase.auth.signOut()}><span><b>Sign out</b><small>Sign out of this WAYS S account</small></span><ChevronRight size={18}/></button></section>
  </div>;
 }
