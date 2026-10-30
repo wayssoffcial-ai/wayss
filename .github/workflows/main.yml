@@ -1,0 +1,50 @@
+name: WAYS S Web Build
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "WAYS-S-Fullstack-Starter/**"
+      - ".github/workflows/main.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build WAYS S web app
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: WAYS-S-Fullstack-Starter
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: WAYS-S-Fullstack-Starter/package-lock.json
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build production website
+        run: npm run build
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+
+      - name: Upload Netlify-ready build
+        uses: actions/upload-artifact@v4
+        with:
+          name: wayss-web-build
+          path: WAYS-S-Fullstack-Starter/dist/
+          if-no-files-found: error
+          retention-days: 14
