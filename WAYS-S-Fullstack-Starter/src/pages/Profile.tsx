@@ -80,7 +80,7 @@ export default function Profile({ userId }: { userId: string }) {
     setBlocked(!!block);
   };
 
-  useEffect(() => { load(); }, [target, userId]);
+  useEffect(() => { setProfile(null); setMenu(false); load(); }, [target, userId]);
   const locked = !!profile?.is_private && !own && !isFollowing;
   const initials = useMemo(() => (profile?.display_name || "W").slice(0, 1).toUpperCase(), [profile?.display_name]);
 
@@ -190,7 +190,7 @@ export default function Profile({ userId }: { userId: string }) {
     {notice && <div className="profile-notice" role="status"><Check size={15}/>{notice}<button onClick={() => setNotice("")} aria-label="Dismiss"><X size={14}/></button></div>}
     {error && <div className="profile-error" role="alert">{error}<button onClick={() => setError("")}>Dismiss</button></div>}
     <div className="profile-cover" style={{ backgroundImage: `linear-gradient(0deg,#08090D 0%,#08090D33 58%,#08090D22 100%),url(${profile.cover_url || ""})` }}>
-      {own && <label className="cover-edit"><ImagePlus size={14}/> Change cover<input type="file" accept="image/*" onChange={(e) => changeImage(e.target.files?.[0] || null, "cover_url")}/></label>}
+      {own && <label className="cover-edit"><ImagePlus size={14}/><span>Update cover</span><input type="file" accept="image/*" onChange={(e) => { changeImage(e.target.files?.[0] || null, "cover_url"); e.currentTarget.value = ""; }}/></label>}
       <button className="menu-trigger" aria-label="Profile menu" aria-expanded={menu} onClick={() => setMenu(!menu)}><MoreHorizontal/></button>
       {menu && <div className="profile-menu">
         <button onClick={() => { setMenu(false); document.getElementById("profile-posts")?.scrollIntoView({ behavior: "smooth" }); }}><FileText/> View posts</button>
@@ -213,7 +213,7 @@ export default function Profile({ userId }: { userId: string }) {
       <div className="profile-top">
         <div className="avatar-wrap">
           {profile.avatar_url ? <img className="avatar xl" src={profile.avatar_url} alt={profile.display_name}/> : <div className="avatar xl avatar-fallback">{initials}</div>}
-          {own && <label className="avatar-edit" title="Change profile photo"><Pencil size={14}/><input type="file" accept="image/*" onChange={(e) => changeImage(e.target.files?.[0] || null, "avatar_url")}/></label>}
+          {own && <label className="avatar-edit" title="Change profile photo"><ImagePlus size={14}/><input type="file" accept="image/*" onChange={(e) => { changeImage(e.target.files?.[0] || null, "avatar_url"); e.currentTarget.value = ""; }}/></label>}
         </div>
         <div className="profile-actions">
           {own ? <button className="secondary-btn" onClick={() => setEditing(true)}><Pencil size={15}/> Edit profile</button> : <>
@@ -239,7 +239,7 @@ export default function Profile({ userId }: { userId: string }) {
 
     {editing && <div className="modal-backdrop" onMouseDown={(e) => { if (e.target === e.currentTarget) setEditing(false); }}>
       <form className="modal form-stack profile-editor" onSubmit={saveProfile}>
-        <div className="modal-head"><div><span className="eyebrow">YOUR IDENTITY</span><h2>Edit profile</h2></div><button type="button" onClick={() => setEditing(false)} aria-label="Close"><X/></button></div>
+        <div className="modal-head"><div><span className="eyebrow">YOUR IDENTITY</span><h2>Edit profile</h2></div><button type="button" onClick={() => setEditing(false)} aria-label="Close"><X/></button></div>\n        <div className="profile-media-tools"><label className="media-upload-card"><span className="media-upload-preview">{profile.avatar_url ? <img src={profile.avatar_url} alt="Current profile"/> : <UserRound/>}</span><span><b>Profile photo</b><small>Square image · up to 10 MB</small><em>Choose photo</em></span><input type="file" accept="image/*" onChange={(e) => { changeImage(e.target.files?.[0] || null, "avatar_url"); e.currentTarget.value = ""; }}/></label><label className="media-upload-card"><span className="media-upload-preview cover-preview">{profile.cover_url ? <img src={profile.cover_url} alt="Current cover"/> : <ImagePlus/>}</span><span><b>Cover image</b><small>Wide image · up to 10 MB</small><em>Choose cover</em></span><input type="file" accept="image/*" onChange={(e) => { changeImage(e.target.files?.[0] || null, "cover_url"); e.currentTarget.value = ""; }}/></label></div>
         <label>Display name</label><input required maxLength={60} value={display} onChange={(e) => setDisplay(e.target.value)}/>
         <label>Username</label><input required maxLength={30} value={username} onChange={(e) => setUsername(e.target.value)}/>
         <label>Identity line <small>Optional</small></label><input maxLength={90} value={identity} onChange={(e) => setIdentity(e.target.value)} placeholder="Developer • Designer • Creator"/>
@@ -261,9 +261,9 @@ export default function Profile({ userId }: { userId: string }) {
           <input aria-label="Hex colour" className="hex-input" value={color} maxLength={7} onChange={(e) => setColor(e.target.value)} />
         </div>
         <div className="link-editor">
-          <label>Paper-Pin links</label>
+          <label>Profile links</label>
           <div className="link-input-row"><input aria-label="Link title" value={linkTitle} onChange={(e) => setLinkTitle(e.target.value)} placeholder="GitHub"/><input aria-label="Link URL" value={linkUrl} onChange={(e) => setLinkUrl(e.target.value)} placeholder="https://github.com/you"/><button type="button" className="secondary-btn" onClick={addLink}><Plus size={15}/></button></div>
-          {sectionLinks.map((l, i) => <div className="link-edit-item" key={i}><span><MapPin size={13}/>{l.label}</span><small>{l.url}</small><button type="button" aria-label="Remove link" onClick={() => setSectionLinks((items) => items.filter((_, index) => index !== i))}><Trash2 size={14}/></button></div>)}
+          {sectionLinks.map((l, i) => <div className="link-edit-item" key={i}><span><MapPin size={13}/>{l.label}</span><small>{l.url}</small><button type="button" aria-label="Edit link" onClick={() => { setLinkTitle(l.label); setLinkUrl(l.url); setSectionLinks((items) => items.filter((_, index) => index !== i)); }}><Pencil size={13}/></button><button type="button" aria-label="Remove link" onClick={() => setSectionLinks((items) => items.filter((_, index) => index !== i))}><Trash2 size={14}/></button></div>)}
         </div>
         <div className="section-preview" style={{ borderColor: color, borderLeftColor: color }}><b>{title || "Your section title"}</b><p>{description || "Your story preview will appear here."}</p>{sectionLinks.map((l, i) => <span className="pin-link" key={i}><MapPin size={13}/>{l.label} ↗</span>)}</div>
         {error && <p className="form-error">{error}</p>}
