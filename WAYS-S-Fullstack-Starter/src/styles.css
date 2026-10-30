@@ -118,3 +118,9 @@
 .ways-verified-badge{display:inline-grid;place-items:center;width:17px;height:17px;border-radius:6px;background:linear-gradient(140deg,#F32950,#a80d34);color:white;font-size:10px;font-weight:900;vertical-align:middle;box-shadow:0 0 12px #F3295040}
 .profile-ways-badge{width:21px;height:21px;font-size:12px}
 @media(max-width:600px){.follow-list-modal{padding:18px}.follow-list-person{padding:9px}.follow-list-person>img{width:42px;height:42px}}
+
+
+.username-live{min-height:18px;margin-top:-8px;font-size:11px;color:#9296A3;display:flex;align-items:center;gap:6px}
+.username-live.available{color:#22C58B}.username-live.taken,.username-live.invalid{color:#F32950}
+.auth-text-link{justify-self:end;background:transparent;border:0;color:#55AAFF;padding:0;font-size:12px;cursor:pointer}
+.success{color:#22C58B;font-size:13px}
