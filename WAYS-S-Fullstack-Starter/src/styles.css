@@ -197,3 +197,15 @@
 @media(max-width:600px){.call-card{padding:13px;border-radius:20px}.remote-video{min-height:190px}}
 
 .orbit-profile-link{display:flex;align-items:center;gap:12px;flex:1;min-width:0;text-align:left;border:0;background:transparent;color:inherit;cursor:pointer}.orbit-profile-link .person-info b{display:flex;align-items:center;gap:5px}
+
+
+/* Theme and dimensional interface preferences */
+:root[data-theme="light"]{--bg:#eef2f7;--text:#101827;--muted:#64748b;--card:#ffffff;--elev:#f5f7fb;--border:#d6deea;--link:#0877c9;color:var(--text);background:var(--bg)}
+:root[data-theme="light"] body{background:radial-gradient(ellipse at 80% 0%,#d9e9f9,transparent 42%),#eef2f7;color:var(--text)}
+:root[data-theme="light"] .panel,:root[data-theme="light"] .post-card,:root[data-theme="light"] .feed-page .page-heading{background:linear-gradient(145deg,#ffffff,#edf2f8);border-color:#d5deea;color:#101827}
+:root[data-theme="light"] input,:root[data-theme="light"] textarea,:root[data-theme="light"] .comment-input input,:root[data-theme="light"] .search-box input,:root[data-theme="light"] .chat-compose input{background:#fff;color:#101827;border-color:#cbd5e1}
+:root[data-theme="light"] .post-actions button,:root[data-theme="light"] .top-actions{color:#334155}
+:root[data-theme="light"] .story-person{color:#101827}
+:root[data-interface="3d"] .panel,:root[data-interface="3d"] .post-card,:root[data-interface="3d"] .custom-section{box-shadow:0 18px 42px #0005,0 3px 0 #ffffff12 inset;transform:perspective(1200px) translateZ(0);transition:transform .25s ease,box-shadow .25s ease}
+:root[data-interface="3d"] .panel:hover,:root[data-interface="3d"] .post-card:hover{transform:perspective(1200px) translateY(-3px) rotateX(.35deg);box-shadow:0 24px 50px #0006,0 3px 0 #ffffff16 inset}
+@media(prefers-color-scheme:light){:root[data-theme="system"]{--bg:#eef2f7;--text:#101827;--muted:#64748b;--card:#fff;--elev:#f5f7fb;--border:#d6deea;color:var(--text);background:var(--bg)}:root[data-theme="system"] body{background:#eef2f7;color:var(--text)}}
