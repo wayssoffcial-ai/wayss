@@ -460,3 +460,107 @@ body{min-height:100%;height:auto;overflow-x:hidden;overflow-y:auto;overscroll-be
 .message-context-menu button.danger{color:#ff8298}
 .inbox-tabs{display:flex;gap:5px;overflow-x:auto;scrollbar-width:none}
 .inbox-tabs button{white-space:nowrap}
+
+
+/* WAYS S responsive system: desktop, tablet and Android/iOS */
+:root{--page-gutter:clamp(14px,3vw,36px);--safe-bottom:env(safe-area-inset-bottom,0px)}
+html,body,#root{width:100%;max-width:100%;overflow-x:clip}
+body{min-width:320px;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+button,a,input,textarea,select{-webkit-tap-highlight-color:transparent}
+input,textarea,select{max-width:100%;font-size:16px}
+img,video,canvas,svg{max-width:100%}
+.page{width:min(100% - 2*var(--page-gutter),1120px);min-width:0;margin-left:auto;margin-right:auto}
+.app-shell{width:100%;min-width:0;padding-bottom:calc(104px + var(--safe-bottom))}
+.topbar{width:100%;max-width:1280px}
+.feed-list{width:min(100%,680px)}
+.messages-fullscreen{width:min(100% - 48px,1440px);max-width:1440px;min-width:0;padding:clamp(18px,2.5vw,34px) 0 calc(120px + var(--safe-bottom))}
+.messages-fullscreen .messages-layout{grid-template-columns:minmax(260px, min(31%,360px)) minmax(0,1fr);gap:clamp(12px,1.5vw,20px);min-width:0;min-height:clamp(560px,calc(100dvh - 230px),900px)}
+.messages-fullscreen .messages-layout>aside,.messages-fullscreen .chat-panel{min-width:0;min-height:0;height:clamp(560px,calc(100dvh - 230px),900px)}
+.messages-fullscreen .messages-layout>aside{overflow-y:auto;overscroll-behavior:contain}
+.messages-fullscreen .chat-panel{overflow:hidden}
+.messages-fullscreen .chat-messages{min-height:0;max-height:none;overscroll-behavior:contain;overflow-y:auto;scrollbar-gutter:stable}
+.messages-fullscreen .chat-title{gap:10px;flex-wrap:nowrap;min-width:0}
+.messages-fullscreen .chat-compose{flex:none;align-items:center;gap:8px;padding-bottom:calc(12px + var(--safe-bottom))}
+.messages-fullscreen .chat-compose>input:not([type=file]){min-width:0;width:0;flex:1}
+.messages-fullscreen .chat-compose>button{flex:none;min-width:42px;min-height:42px}
+.messages-fullscreen .bubble{max-width:min(78%,520px);overflow-wrap:anywhere;word-break:break-word}
+.messages-fullscreen .message-context-menu{max-width:min(280px,calc(100vw - 36px))}
+.quick-wrap{left:max(18px,env(safe-area-inset-left));bottom:calc(18px + var(--safe-bottom))}
+.modal-backdrop{padding:clamp(10px,3vw,24px);padding-bottom:calc(10px + var(--safe-bottom))}
+.modal{width:min(560px,100%);max-height:calc(100dvh - 32px - var(--safe-bottom));overflow:auto;overscroll-behavior:contain}
+.post-card,.panel,.custom-section,.messages-layout,.chat-panel{min-width:0}
+@media(min-width:1500px){.messages-fullscreen{width:min(100% - 80px,1500px)}.messages-fullscreen .messages-layout{grid-template-columns:370px minmax(0,1fr)}}
+@media(max-width:900px){
+ .topbar{padding-inline:20px}.page{width:calc(100% - 36px)}
+ .messages-fullscreen{width:calc(100% - 32px)}
+ .messages-fullscreen .messages-layout{grid-template-columns:minmax(220px,34%) minmax(0,1fr);gap:10px}
+ .messages-fullscreen .chat-panel{padding:12px}
+ .messages-fullscreen .chat-title-actions button{padding:7px}
+ .profile-cover{height:230px}
+}
+@media(max-width:700px){
+ .app-shell{padding-bottom:calc(94px + var(--safe-bottom))}
+ .topbar{height:60px;padding-inline:14px}.wordmark{font-size:22px}.top-actions{gap:8px}
+ .page{width:calc(100% - 24px);padding-inline:0;margin-top:22px}
+ .page h1{font-size:clamp(25px,7vw,31px)}
+ .messages-fullscreen{width:100%;margin:0;padding:12px 12px calc(108px + var(--safe-bottom));min-height:calc(100dvh - 60px)}
+ .messages-heading{margin-bottom:12px}.messages-heading h1{font-size:27px}
+ .messages-fullscreen .messages-layout{display:flex;flex-direction:column;gap:0;min-height:0;height:auto;border:0;overflow:visible}
+ .messages-fullscreen .messages-layout>aside{display:flex;flex-direction:column;width:100%;height:auto;min-height:calc(100dvh - 240px);max-height:none;overflow:visible;border:1px solid #ffffff18;border-radius:18px;padding:8px}
+ .messages-fullscreen .messages-layout>aside.mobile-hidden{display:none}
+ .messages-fullscreen .messages-layout .chat-panel{display:flex;width:100%;height:calc(100dvh - 150px - var(--safe-bottom));min-height:420px;max-height:900px;border:1px solid #ffffff18;border-radius:18px;padding:0;overflow:hidden}
+ .messages-fullscreen .messages-layout .chat-panel.mobile-hidden{display:none}
+ .messages-fullscreen .chat-title{position:relative;flex:none;padding:10px 9px;min-height:64px;background:#101722;border-bottom:1px solid #ffffff14}
+ .messages-fullscreen .chat-title .avatar{width:38px;height:38px}
+ .messages-fullscreen .chat-title-actions{margin-left:auto;display:flex;gap:3px}
+ .messages-fullscreen .chat-title-actions button{width:36px;height:36px;display:grid;place-items:center;padding:0}
+ .messages-fullscreen .chat-messages{flex:1;width:100%;min-height:0;max-height:none;padding:14px 10px;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+ .messages-fullscreen .bubble{max-width:84%;padding:10px 12px;font-size:13px}
+ .messages-fullscreen .chat-compose{flex:none;position:relative;z-index:4;display:flex;align-items:center;gap:6px;padding:9px 8px calc(9px + var(--safe-bottom));background:#0d1119;border-top:1px solid #ffffff16}
+ .messages-fullscreen .chat-compose>input:not([type=file]){height:44px;min-height:44px;padding:9px 11px;font-size:16px}
+ .messages-fullscreen .chat-compose>button{width:40px;height:40px;min-width:40px;min-height:40px;padding:0;display:grid;place-items:center}
+ .messages-fullscreen .chat-info-panel{max-height:42%;overflow-y:auto;overscroll-behavior:contain}
+ .messages-fullscreen .inbox-toolbar{gap:7px;align-items:center}
+ .messages-fullscreen .inbox-tabs{min-width:0;flex:1;overflow-x:auto;white-space:nowrap;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+ .messages-fullscreen .inbox-tabs button{flex:none;padding:9px 11px;font-size:12px}
+ .messages-fullscreen .inbox-toolbar>.primary-btn{flex:none;min-width:max-content}
+ .messages-fullscreen .inbox-search{min-width:0;gap:5px;padding:7px 9px}
+ .messages-fullscreen .inbox-search input{width:0;min-width:0;font-size:16px}
+ .messages-fullscreen .person-row{min-height:60px;padding:10px}
+ .messages-fullscreen .message-context-menu{position:fixed;left:50%;top:auto;bottom:calc(76px + var(--safe-bottom));transform:translateX(-50%);width:min(330px,calc(100vw - 28px));max-width:none;grid-template-columns:repeat(2,minmax(0,1fr));box-shadow:0 16px 50px #000d}
+ .messages-fullscreen .chat-options{position:absolute;right:5px;top:58px;max-width:calc(100vw - 50px)}
+ .message-request-compose,.message-request-detail{width:100%;min-height:0;margin:10px auto;padding:18px;border-radius:18px}
+ .request-decision{flex-direction:column}.request-decision button{width:100%}
+ .quick-wrap{left:10px;bottom:calc(10px + var(--safe-bottom))}
+ .quick-logo{width:48px;height:48px}.quick-glass{max-width:calc(100vw - 20px);gap:0;padding:6px 4px}
+ .quick-glass button{width:clamp(42px,12vw,49px);height:50px}.quick-glass button small{font-size:9px}
+ .quick-glass .quick-plus{width:42px;height:42px;min-width:42px}
+ .profile-cover{height:clamp(165px,48vw,215px)}
+ .profile-main{padding-inline:12px}
+ .profile-top{gap:8px;align-items:flex-end;flex-wrap:wrap}
+ .profile-actions{flex-wrap:wrap;max-width:65%;justify-content:flex-end}
+ .profile-actions button{min-height:38px}
+ .stats{gap:clamp(15px,6vw,28px);flex-wrap:wrap}
+ .settings-row{padding:15px;gap:12px}
+ .auth-page{padding:16px}.auth-card{padding:clamp(20px,6vw,28px)}
+ .modal-backdrop{align-items:end;padding:10px 10px calc(10px + var(--safe-bottom))}
+ .modal{width:100%;max-width:560px;max-height:calc(92dvh - var(--safe-bottom));border-radius:22px 22px 16px 16px;padding:18px}
+ .quick-screen-content{width:calc(100% - 28px)}
+}
+@media(max-width:380px){
+ .messages-fullscreen .inbox-toolbar .primary-btn{font-size:11px;padding:8px}
+ .messages-fullscreen .inbox-tabs button{padding:8px 9px;font-size:11px}
+ .messages-fullscreen .chat-title-actions button{width:32px;height:32px}
+ .messages-fullscreen .chat-title{gap:6px}
+ .quick-glass button{width:41px}.quick-glass .quick-plus{width:39px;height:39px;min-width:39px}
+ .profile-actions{max-width:68%}.profile-actions button{padding:8px;font-size:11px}
+}
+@media(orientation:landscape) and (max-height:520px) and (max-width:900px){
+ .messages-fullscreen .messages-layout .chat-panel{height:calc(100dvh - 78px);min-height:300px}
+ .messages-fullscreen .messages-layout>aside{min-height:300px}
+ .messages-fullscreen .chat-title{min-height:52px}
+ .messages-fullscreen .chat-messages{padding-block:8px}
+ .messages-fullscreen .chat-compose{padding-block:5px}
+ .quick-wrap{transform:scale(.86);transform-origin:left bottom}
+}
+@media(prefers-reduced-motion:reduce){.messages-fullscreen *{scroll-behavior:auto!important}}
