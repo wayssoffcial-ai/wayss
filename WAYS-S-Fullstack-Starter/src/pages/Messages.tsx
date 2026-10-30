@@ -76,9 +76,9 @@ export default function Messages({userId}:{userId:string}) {
  };
  const send=async(media?:File)=>{
   if((!body.trim()&&!media)||!selected||busy)return;setBusy(true);setError("");
-  try{let media_url:string|null=null;if(media){if(!/^(image|video|audio)\//.test(media.type))throw new Error("This file type is not supported.");media_url=await uploadChatMedia(media,userId,selected.id);type=media.type.startsWith("video/")?"video":media.type.startsWith("audio/")?"audio":"image";}
-   const {error}=await supabase.from("messages").insert({sender_id:userId,receiver_id:selected.id,body:body.trim()||" ",media_url,message_type:type});
-   if(error)throw error;setBody("");if(file.current)file.current.value="";
+  try{let media_url:string|null=null;let type="text";if(media){if(!/^(image|video|audio)\//.test(media.type))throw new Error("This file type is not supported.");media_url=await uploadChatMedia(media,userId,selected.id);type=media.type.startsWith("video/")?"video":media.type.startsWith("audio/")?"audio":"image";}
+   const pref=prefFor(selected.id);const seconds=pref?.disappearing_seconds;const payload:any={sender_id:userId,receiver_id:selected.id,body:body.trim()||" ",media_url,message_type:type,reply_to:replyTo?.id||null};if(seconds){payload.is_disappearing=true;payload.expires_at=new Date(Date.now()+seconds*1000).toISOString();}const {error}=await supabase.from("messages").insert(payload);
+   if(error)throw error;setBody("");setReplyTo(null);if(file.current)file.current.value="";
   }catch(e){setError(e instanceof Error?e.message:"Message could not be sent.");}finally{setBusy(false);}
  };
  const saveMessageEdit=async()=>{if(!editing||!body.trim())return;const {error}=await supabase.from("messages").update({body:body.trim(),edited_at:new Date().toISOString()}).eq("id",editing.id).eq("sender_id",userId);if(error)setError(error.message);else{setMessages(s=>s.map(m=>m.id===editing.id?{...m,body:body.trim(),edited_at:new Date().toISOString()}:m));setEditing(null);setBody("");}};
