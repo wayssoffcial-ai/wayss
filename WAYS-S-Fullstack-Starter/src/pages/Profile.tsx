@@ -69,7 +69,7 @@ export default function Profile({ userId }: { userId: string }) {
       supabase.from("follows").select("*", { count: "exact", head: true }).eq("follower_id", target),
       supabase.from("follows").select("id").eq("follower_id", userId).eq("following_id", target).maybeSingle(),
       supabase.from("follow_requests").select("id,status").eq("requester_id", userId).eq("requested_id", target).eq("status", "pending").maybeSingle(),
-      supabase.from("profile_blocks").select("id").eq("blocker_id", target).eq("blocked_id", userId).maybeSingle()
+      supabase.from("profile_blocks").select("id").eq("blocker_id", userId).eq("blocked_id", target).maybeSingle()
     ]);
     setSections((s || []) as Section[]);
     setPosts((po || []) as Post[]);
