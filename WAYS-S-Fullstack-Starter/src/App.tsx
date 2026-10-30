@@ -3,6 +3,7 @@ import { Routes, Route, Navigate, Link, useNavigate } from "react-router-dom";
 import { supabase, isConfigured } from "./lib/supabase";
 import { ensureProfile } from "./lib/api";
 import QuickCenter from "./components/QuickCenter";
+import IncomingCallListener from "./components/IncomingCallListener";
 import Auth from "./pages/Auth";
 import Home from "./pages/Home";
 import Orbit from "./pages/Orbit";
@@ -35,6 +36,6 @@ export default function App() {
    <Route path="/settings" element={<Settings userId={session.user.id}/>}/>
    <Route path="/notifications" element={<Notifications userId={session.user.id}/>}/>
    <Route path="*" element={<Navigate to="/" replace/>}/>
-  </Routes><QuickCenter/>
+  </Routes><IncomingCallListener userId={session.user.id}/><QuickCenter/>
  </div>;
 }
