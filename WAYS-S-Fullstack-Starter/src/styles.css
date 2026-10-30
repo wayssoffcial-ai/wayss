@@ -365,3 +365,20 @@
 
 /* Help Center */
 .help-upload{display:flex;align-items:center;gap:12px;padding:14px;border:1px dashed #ffffff35;border-radius:14px;background:#ffffff05}.help-upload input{max-width:100%}.help-file-preview{max-width:100%;max-height:180px;border-radius:12px;object-fit:contain}.support-admin{padding:18px;margin:16px 0}.support-admin h3{margin:0}.support-admin input{width:100%}
+
+.story-progress{display:flex;gap:4px;padding:10px 10px 3px}
+.story-progress>span{height:3px;flex:1;border-radius:9px;background:#ffffff45;overflow:hidden}
+.story-progress>span.done{background:#fff}
+.story-progress>span.current i{display:block;height:100%;background:#fff;animation:storyProgress 6s linear forwards;transform-origin:left}
+.story-media-stage{position:relative;min-height:280px;display:grid;place-items:center;cursor:pointer}
+.story-media-stage video,.story-media-stage img{max-width:100%;max-height:min(68vh,680px);object-fit:contain}
+.story-viewer-card>header{padding-top:8px}
+@keyframes storyProgress{from{width:0}to{width:100%}}
+.help-heading{margin:26px 0}
+.help-heading h1{margin-bottom:8px}
+.help-heading p{max-width:480px;line-height:1.6}
+.help-icon{display:grid;place-items:center;width:48px;height:48px;border-radius:15px;background:#f3295018;color:var(--red);margin-bottom:15px}
+.help-form{padding:22px}
+.help-form textarea{width:100%;resize:vertical}
+.help-file-name{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:12px}
+.help-file-name button{border:0;background:none;color:var(--muted)}
