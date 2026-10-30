@@ -9,7 +9,7 @@ Deno.serve(async (req: Request) => {
   const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
   const resendKey = Deno.env.get("RESEND_API_KEY");
   if (!resendKey) return new Response(JSON.stringify({ error: "Support email provider is not configured." }), { status: 503, headers: { ...cors, "Content-Type": "application/json" } });
-  const token = (req.headers.get("Authorization") || "").replace(/^Bearer\\s+/i, "");
+  const token = (req.headers.get("Authorization") || "").replace(/^Bearer\s+/i, "");
   if (!token) return new Response(JSON.stringify({ error: "Authentication required." }), { status: 401, headers: { ...cors, "Content-Type": "application/json" } });
   const admin = createClient(url, serviceKey);
   const { data: auth, error: authError } = await admin.auth.getUser(token);
@@ -23,7 +23,7 @@ Deno.serve(async (req: Request) => {
   let screenshot = "";
   if (ticket.screenshot_path) {
     const { data } = await admin.storage.from("support-attachments").createSignedUrl(ticket.screenshot_path, 60 * 60 * 24 * 7);
-    if (data?.signedUrl) screenshot = "\\nScreenshot (private link, expires in 7 days): " + data.signedUrl;
+    if (data?.signedUrl) screenshot = "\nScreenshot (private link, expires in 7 days): " + data.signedUrl;
   }
   const response = await fetch("https://api.resend.com/emails", {
     method: "POST",
@@ -32,7 +32,7 @@ Deno.serve(async (req: Request) => {
       from: Deno.env.get("SUPPORT_FROM_EMAIL") || "WAYS S Support <onboarding@resend.dev>",
       to: [destination],
       subject: "WAYS S Help Center · " + ticket.id,
-      text: "A user submitted a support request.\\n\\nUser ID: " + ticket.user_id + "\\nTicket: " + ticket.id + "\\nCreated: " + ticket.created_at + "\\n\\nIssue:\\n" + ticket.description + screenshot
+      text: "A user submitted a support request.\n\nUser ID: " + ticket.user_id + "\nTicket: " + ticket.id + "\nCreated: " + ticket.created_at + "\n\nIssue:\n" + ticket.description + screenshot
     })
   });
   if (!response.ok) return new Response(JSON.stringify({ error: "Email provider rejected the support message." }), { status: 502, headers: { ...cors, "Content-Type": "application/json" } });
