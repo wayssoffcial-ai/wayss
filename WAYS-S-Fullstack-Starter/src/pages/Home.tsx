@@ -7,8 +7,8 @@ import { Users, Sparkles } from "lucide-react";
 
 export default function Home({ userId }: { userId:string }) {
  const [posts,setPosts]=useState<Post[]>([]);const [loading,setLoading]=useState(true);const [followingCount,setFollowingCount]=useState(0);const [pull,setPull]=useState(0);const [refreshing,setRefreshing]=useState(false);const touchStart=useRef(0);const nav=useNavigate();
- const load=useCallback(async()=>{
-  setLoading(true);
+ const load=useCallback(async(quiet=false)=>{
+  if(!quiet)setLoading(true);
   const {data:follows,error:followError}=await supabase.from("follows").select("following_id").eq("follower_id",userId);
   if(followError){if(!quiet)setPosts([]);setLoading(false);return;}
   const ids=[userId,...(follows||[]).map(x=>x.following_id)];
