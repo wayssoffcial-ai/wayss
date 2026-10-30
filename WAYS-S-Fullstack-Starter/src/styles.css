@@ -164,3 +164,17 @@
 .story-viewer-card header button{border:0;background:transparent;color:white}
 .story-viewer-card video,.story-viewer-media{width:100%;flex:1;min-height:0;object-fit:contain;background:#000}
 .story-viewer-card footer{justify-content:center}
+
+
+.chat-title{display:flex;align-items:center;gap:10px}
+.chat-title>span{display:grid;gap:3px;flex:1}
+.chat-title>span small{font-size:11px;color:#9296A3}
+.chat-title-actions{display:flex;gap:6px}
+.chat-title-actions button,.chat-back,.chat-attach{width:36px;height:36px;border:1px solid #ffffff16;border-radius:12px;background:#ffffff08;color:#dfe5f0;display:grid;place-items:center}
+.chat-title-actions svg,.chat-back svg,.chat-attach svg{width:17px;height:17px}
+.chat-image{display:block;max-width:min(250px,65vw);max-height:300px;object-fit:cover;border-radius:12px;margin-bottom:5px}
+.message-status{display:flex;align-items:center;justify-content:flex-end;gap:4px;color:#8fa7c2;font-size:9px;margin-top:4px}
+.chat-compose{display:flex;align-items:center;gap:8px}
+.chat-compose>input:not([type=file]){min-width:0;flex:1}
+.chat-attach{flex-shrink:0;cursor:pointer}
+@media(max-width:650px){.messages-layout{display:block}.messages-layout aside,.messages-layout .chat-panel{min-height:60vh}.messages-layout .mobile-hidden{display:none}.chat-title-actions{gap:3px}.chat-title-actions button{width:32px;height:32px}.chat-back{width:30px;height:32px;border:0;background:transparent}}
