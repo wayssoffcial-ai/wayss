@@ -41,3 +41,7 @@ drop policy if exists "viewers record own story views" on public.story_views;
 create policy "viewers record own story views" on public.story_views for insert to authenticated with check(auth.uid()=user_id and exists(select 1 from public.stories s where s.id=story_id and s.expires_at>now() and s.user_id<>auth.uid()));
 drop policy if exists "viewers update own story views" on public.story_views;
 create policy "viewers update own story views" on public.story_views for update to authenticated using(auth.uid()=user_id) with check(auth.uid()=user_id);
+
+grant select,insert,delete on public.story_likes to authenticated;
+grant select,insert,delete on public.story_comments to authenticated;
+grant select,insert,update on public.story_views to authenticated;
