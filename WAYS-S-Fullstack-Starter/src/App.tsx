@@ -3,6 +3,7 @@ import { Routes, Route, Navigate, Link, useNavigate } from "react-router-dom";
 import { supabase, isConfigured } from "./lib/supabase";
 import { ensureProfile } from "./lib/api";
 import QuickCenter from "./components/QuickCenter";
+import HelpCenter from "./pages/HelpCenter";
 import IncomingCallListener from "./components/IncomingCallListener";
 import Auth from "./pages/Auth";
 import Home from "./pages/Home";
@@ -26,7 +27,7 @@ export default function App() {
  if(!ready)return <div className="loading-screen"><div className="brand-mark">WAYS<span>S</span></div><p>Entering your orbit...</p></div>;
  if(configError)return <div className="setup-screen"><div className="brand-mark">WAYS<span>S</span></div><h1>Connect your backend</h1><p>Add your Supabase project URL and anon key to <code>.env</code>. Follow the setup guide in README.md, then restart the dev server.</p><code>VITE_SUPABASE_URL<br/>VITE_SUPABASE_ANON_KEY</code></div>;
  if(!session)return <Auth/>;
- return <div className="app-shell"><header className="topbar"><Link to="/" className="wordmark">WAYS<span>S</span></Link><div className="top-actions"><Link to="/orbit">Discover</Link><Link to="/notifications" className="notification-nav" aria-label="Notifications"><Bell size={19}/><span>Notifications</span>{unread>0&&<i className="nav-unread-count">{unread>99?"99+":unread}</i>}</Link></div></header>
+ return <div className="app-shell"><header className="topbar"><Link to="/" className="wordmark">WAYS<span>S</span></Link><div className="top-actions"><Link to="/notifications" className="notification-nav" aria-label="Notifications"><Bell size={19}/><span>Notifications</span>{unread>0&&<i className="nav-unread-count">{unread>99?"99+":unread}</i>}</Link></div></header>
   <Routes>
    <Route path="/" element={<Home userId={session.user.id}/>}/>
    <Route path="/orbit" element={<Orbit userId={session.user.id}/>}/>
@@ -35,6 +36,7 @@ export default function App() {
    <Route path="/profile/:id" element={<Profile userId={session.user.id}/>}/>
    <Route path="/messages" element={<Messages userId={session.user.id}/>}/>
    <Route path="/settings" element={<Settings userId={session.user.id}/>}/>
+   <Route path="/help" element={<HelpCenter userId={session.user.id}/>}/>
    <Route path="/notifications" element={<Notifications userId={session.user.id}/>}/>
    <Route path="*" element={<Navigate to="/" replace/>}/>
   </Routes><IncomingCallListener userId={session.user.id}/><QuickCenter/>
