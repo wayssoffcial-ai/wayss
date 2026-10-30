@@ -3,7 +3,7 @@ import { supabase, Post } from "../lib/supabase";
 import PostCard from "../components/PostCard";
 import StoryBar from "../components/StoryBar";
 import { useNavigate } from "react-router-dom";
-import { Users, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
 
 export default function Home({ userId }: { userId:string }) {
  const [posts,setPosts]=useState<Post[]>([]);const [loading,setLoading]=useState(true);const [followingCount,setFollowingCount]=useState(0);const [pull,setPull]=useState(0);const [refreshing,setRefreshing]=useState(false);const touchStart=useRef(0);const nav=useNavigate();
@@ -18,7 +18,6 @@ export default function Home({ userId }: { userId:string }) {
  },[userId]);
  useEffect(()=>{load();const ch=supabase.channel("home-feed-"+userId).on("postgres_changes",{event:"*",schema:"public",table:"posts"},()=>load()).subscribe();return()=>{supabase.removeChannel(ch);};},[load,userId]);
  const finishPull=async(endY:number)=>{const distance=endY-touchStart.current;if(distance>76&&!refreshing){setRefreshing(true);setPull(76);await load(true);setRefreshing(false);}setPull(0);touchStart.current=0;};
- return <div className="page feed-page feed-pull-zone" onTouchStart={e=>{if(window.scrollY<=2)touchStart.current=e.touches[0].clientY;}} onTouchMove={e=>{if(touchStart.current){const d=Math.max(0,Math.min(90,e.touches[0].clientY-touchStart.current));setPull(d);}}} onTouchEnd={e=>{if(touchStart.current)void finishPull(e.changedTouches[0].clientY);}}><div className={"pull-orbit-indicator "+(refreshing?"is-refreshing":"")} style={{height:Math.max(0,pull)}}><span className="pull-orbit-core"><i/><i/><i/></span><small>{refreshing?"Re-syncing your orbit…":pull>76?"Release to refresh":"Pull to refresh"}</small></div><StoryBar userId={userId}/><div className="page-heading"><div><h1>Home</h1></div></div>
- {loading?<div className="empty-state">Finding your orbit...</div>:posts.length===0?<div className="empty-state"><div className="empty-orbit"><Sparkles/></div><h2>Your feed starts here</h2><p>{followingCount===0?"Follow people in Orbit to see their posts here.":"Your followed creators haven't posted yet."}</p><button className="primary-btn" onClick={()=>nav("/orbit")}><Users size={16}/> Discover people</button></div>:<div className="feed-list">{posts.map(p=><PostCard key={p.id} post={p} userId={userId} onChanged={load}/>)}</div>}
+ return <div className="page feed-page feed-pull-zone" onTouchStart={e=>{if(window.scrollY<=2)touchStart.current=e.touches[0].clientY;}} onTouchMove={e=>{if(touchStart.current){const d=Math.max(0,Math.min(90,e.touches[0].clientY-touchStart.current));setPull(d);}}} onTouchEnd={e=>{if(touchStart.current)void finishPull(e.changedTouches[0].clientY);}}><div className={"pull-orbit-indicator "+(refreshing?"is-refreshing":"")} style={{height:Math.max(0,pull)}}><span className="pull-orbit-core"><i/><i/><i/></span><small>{refreshing?"Re-syncing your orbit…":pull>76?"Release to refresh":"Pull to refresh"}</small></div><StoryBar userId={userId}/>{loading?<div className="empty-state">Finding your orbit...</div>:posts.length===0?<div className="empty-state"><div className="empty-orbit"><Sparkles/></div><h2>Your feed starts here</h2><p>{followingCount===0?"Follow people in Orbit to see their posts here.":"Your followed creators haven't posted yet."}</p></div>:<div className="feed-list">{posts.map(p=><PostCard key={p.id} post={p} userId={userId} onChanged={load}/>)}</div>}
  </div>;
 }
