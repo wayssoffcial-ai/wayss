@@ -261,8 +261,8 @@ export default function Profile({ userId }: { userId: string }) {
     {sectionOpen && <div className="modal-backdrop" onMouseDown={(e) => { if (e.target === e.currentTarget) { setSectionOpen(false); resetSectionForm(); } }}>
       <form className="modal form-stack profile-editor" onSubmit={saveSection}>
         <div className="modal-head"><div><span className="eyebrow">MAKE IT PERSONAL</span><h2>{editId ? "Edit section" : "Create a section"}</h2></div><button type="button" onClick={() => { setSectionOpen(false); resetSectionForm(); }} aria-label="Close"><X/></button></div>
-        <label>Section title</label><input required maxLength={60} value={title} onChange={(e) => setTitle(e.target.value)} placeholder="My journey"/>
-        <label>Description</label><textarea rows={5} maxLength={2000} value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Tell your story..."/>
+        <label>Section title</label><input required maxLength={60} value={title} onChange={(e) => setTitle(e.target.value)} placeholder=""/>
+        <label>Description</label><textarea rows={5} maxLength={2000} value={description} onChange={(e) => setDescription(e.target.value)} placeholder=""/>
         <label>Choose colour</label>
         <div className="color-row">{PALETTE.map((c) => <button type="button" key={c} aria-label={`Choose ${c}`} aria-pressed={color === c} className={color === c ? "swatch selected" : "swatch"} style={{ background: c }} onClick={() => setColor(c)}/>)}
           <label className="color-picker-label" title="Pick a custom colour"><input type="color" value={/^#[0-9A-Fa-f]{6}$/.test(color) ? color : "#F32950"} onChange={(e) => setColor(e.target.value)}/><span>Custom</span></label>
@@ -273,7 +273,7 @@ export default function Profile({ userId }: { userId: string }) {
           <div className="link-input-row"><input aria-label="Link title" value={linkTitle} onChange={(e) => setLinkTitle(e.target.value)} placeholder="GitHub"/><input aria-label="Link URL" value={linkUrl} onChange={(e) => setLinkUrl(e.target.value)} placeholder="https://github.com/you"/><button type="button" className="secondary-btn" onClick={addLink}><Plus size={15}/></button></div>
           {sectionLinks.map((l, i) => <div className="link-edit-item" key={i}><span><MapPin size={13}/>{l.label}</span><small>{l.url}</small><button type="button" aria-label="Edit link" onClick={() => { setLinkTitle(l.label); setLinkUrl(l.url); setSectionLinks((items) => items.filter((_, index) => index !== i)); }}><Pencil size={13}/></button><button type="button" aria-label="Remove link" onClick={() => setSectionLinks((items) => items.filter((_, index) => index !== i))}><Trash2 size={14}/></button></div>)}
         </div>
-        <div className="section-preview" style={{ borderColor: color, borderLeftColor: color }}><b>{title || "Your section title"}</b><p>{description || "Your story preview will appear here."}</p>{sectionLinks.map((l, i) => <span className="pin-link" key={i}><MapPin size={13}/>{l.label} ↗</span>)}</div>
+        <div className="section-preview" style={{ borderColor: color, borderLeftColor: color }}><b>{title}</b><p>{description}</p>{sectionLinks.map((l, i) => <span className="pin-link" key={i}><MapPin size={13}/>{l.label} ↗</span>)}</div>
         {error && <p className="form-error">{error}</p>}
         <button className="primary-btn" disabled={busy}>{busy ? "Saving..." : "Save section"}</button>
         {editId && <button type="button" className="danger-btn" onClick={() => removeSection(editId)}><Trash2 size={15}/> Delete section</button>}
