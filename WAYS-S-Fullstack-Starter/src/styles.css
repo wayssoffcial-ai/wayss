@@ -353,3 +353,12 @@
 @keyframes logoutCore{50%{transform:scale(1.07);box-shadow:0 0 85px #F3295090,0 0 130px #10263B}}
 @keyframes logoutTwinkle{to{opacity:.2;transform:scale(.5)}}
 @media(prefers-reduced-motion:reduce){.logout-cinematic *,.logout-cinematic:before,.logout-cinematic:after{animation:none!important}}
+
+
+/* Fix profile avatar being covered by the cover image */
+.profile-cover{z-index:1!important}
+.profile-main{z-index:2!important}
+.profile-top{position:relative;z-index:3}
+.avatar-wrap{position:relative;z-index:4;flex:none}
+.avatar.xl{display:block;object-fit:cover;object-position:center;width:104px;height:104px;flex:none}
+@media(max-width:650px){.avatar.xl{width:82px;height:82px}}
