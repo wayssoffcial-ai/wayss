@@ -21,9 +21,9 @@ export default function App() {
   const {data:{subscription}}=supabase.auth.onAuthStateChange((_event,s)=>{setSession(s);});
   return()=>subscription.unsubscribe();
  },[]);
+ useEffect(()=>{let active=true;if(session?.user?.id){supabase.from("profiles").select("account_status").eq("id",session.user.id).maybeSingle().then(async({data})=>{if(active&&data?.account_status==="suspended"){await supabase.auth.signOut();setSession(null);}});}return()=>{active=false;};},[session?.user?.id]);
  if(!ready)return <div className="loading-screen"><div className="brand-mark">WAYS<span>S</span></div><p>Entering your orbit...</p></div>;
  if(configError)return <div className="setup-screen"><div className="brand-mark">WAYS<span>S</span></div><h1>Connect your backend</h1><p>Add your Supabase project URL and anon key to <code>.env</code>. Follow the setup guide in README.md, then restart the dev server.</p><code>VITE_SUPABASE_URL<br/>VITE_SUPABASE_ANON_KEY</code></div>;
- useEffect(()=>{let active=true;if(session?.user?.id){supabase.from("profiles").select("account_status").eq("id",session.user.id).maybeSingle().then(async({data})=>{if(active&&data?.account_status==="suspended"){await supabase.auth.signOut();setSession(null);}});}return()=>{active=false;};},[session?.user?.id]);
  if(!session)return <Auth/>;
  return <div className="app-shell"><header className="topbar"><Link to="/" className="wordmark">WAYS<span>S</span></Link><div className="top-actions"><Link to="/orbit">Discover</Link><Link to="/notifications" className="notification-nav" aria-label="Notifications"><Bell size={19}/><span>Notifications</span></Link></div></header>
   <Routes>
