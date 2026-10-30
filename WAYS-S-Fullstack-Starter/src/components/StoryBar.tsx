@@ -4,7 +4,7 @@ import { supabase } from "../lib/supabase";
 import { uploadMedia } from "../lib/api";
 type Story={id:string;user_id:string;media_url:string;media_type:"image"|"video";caption:string|null;created_at:string;expires_at:string;profile:any};
 type StoryComment={id:string;story_id:string;user_id:string;body:string;created_at:string;profile?:{username:string;avatar_url:string|null;display_name:string}};
-type StoryView={user_id:string;viewed_at:string;profile?:{username:string;display_name:string;avatar_url:string|null}};
+type StoryView={user_id:string;viewed_at:string;profile?:{username:string;display_name:string;avatar_url:string|null}[]};
 export default function StoryBar({userId}:{userId:string}){
  const [stories,setStories]=useState<Story[]>([]),[viewer,setViewer]=useState<Story|null>(null),[busy,setBusy]=useState(false),[error,setError]=useState("");
  const [liked,setLiked]=useState(false),[likes,setLikes]=useState(0),[comments,setComments]=useState<StoryComment[]>([]),[comment,setComment]=useState("");
@@ -25,7 +25,7 @@ export default function StoryBar({userId}:{userId:string}){
  <input ref={file} hidden type="file" accept="image/*,video/*" onChange={e=>upload(e.target.files?.[0]||null)}/>{error&&<p className="form-error" role="status">{error}</p>}
  {viewer&&<div className="story-viewer" onClick={()=>setViewer(null)}><div className="story-viewer-card" onClick={e=>e.stopPropagation()}><header><img src={viewer.profile?.avatar_url||"/avatar.svg"}/><b>@{viewer.profile?.username}</b><button onClick={()=>setViewer(null)}><X/></button></header>{viewer.media_type==="video"?<video src={viewer.media_url} controls autoPlay playsInline/>:<img className="story-viewer-media" src={viewer.media_url}/>}
  <div className="story-actions"><button onClick={toggleLike} aria-label="Like story" className={liked?"story-liked":""}><Heart size={18} fill={liked?"currentColor":"none"}/>{likes}</button><button onClick={copyStory}><Copy size={17}/> Copy link</button>{viewer.user_id===userId&&<button onClick={()=>setShowViews(v=>!v)}><Eye size={17}/> Views {views.length}</button>}</div>
- {showViews&&viewer.user_id===userId&&<div className="story-view-list"><b>Viewed by · {views.length}</b>{views.length?views.map(v=><div key={v.user_id}><img src={v.profile?.avatar_url||"/avatar.svg"}/><span>{v.profile?.display_name||"Member"} <small>@{v.profile?.username||"member"}</small></span></div>):<small>No views yet.</small>}</div>}
+ {showViews&&viewer.user_id===userId&&<div className="story-view-list"><b>Viewed by · {views.length}</b>{views.length?views.map(v=><div key={v.user_id}><img src={v.profile?.[0]?.avatar_url||"/avatar.svg"}/><span>{v.profile?.[0]?.display_name||"Member"} <small>@{v.profile?.[0]?.username||"member"}</small></span></div>):<small>No views yet.</small>}</div>}
  <div className="story-comments">{comments.map(c=><p key={c.id}><b>@{c.profile?.username||"member"}</b> {c.body}</p>)}</div>{viewer.user_id!==userId&&<form className="story-comment-form" onSubmit={e=>{e.preventDefault();void sendComment();}}><input value={comment} onChange={e=>setComment(e.target.value)} placeholder="Reply to story..." maxLength={500}/><button disabled={!comment.trim()}><Send size={16}/></button></form>}
  <footer>{viewer.user_id===userId?<button className="danger-btn" onClick={()=>remove(viewer)}><Trash2 size={15}/> Delete story</button>:<span>{viewer.profile?.display_name}</span>}</footer></div></div>}</>;
 }
