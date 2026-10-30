@@ -15,17 +15,18 @@ import Notifications from "./pages/Notifications";
 import { Bell } from "lucide-react";
 
 export default function App() {
- const [session,setSession]=useState<any>(null);const [ready,setReady]=useState(false);const [configError,setConfigError]=useState(false);
+ const [session,setSession]=useState<any>(null);const [ready,setReady]=useState(false);const [configError,setConfigError]=useState(false);const [unread,setUnread]=useState(0);
  useEffect(()=>{if(!isConfigured){setConfigError(true);setReady(true);return;}
   supabase.auth.getSession().then(async({data})=>{setSession(data.session);if(data.session?.user){try{await ensureProfile(data.session.user);}catch(e){console.error(e);}}setReady(true);});
   const {data:{subscription}}=supabase.auth.onAuthStateChange((_event,s)=>{setSession(s);});
   return()=>subscription.unsubscribe();
  },[]);
+ useEffect(()=>{if(!session?.user?.id){setUnread(0);return;}const uid=session.user.id;const loadUnread=async()=>{const {count}=await supabase.from("notifications").select("id",{count:"exact",head:true}).eq("user_id",uid).eq("is_read",false);setUnread(count||0);};loadUnread();const channel=supabase.channel("app-unread-"+uid).on("postgres_changes",{event:"INSERT",schema:"public",table:"notifications",filter:"user_id=eq."+uid},()=>loadUnread()).subscribe();return()=>{supabase.removeChannel(channel);};},[session?.user?.id]);
  useEffect(()=>{let active=true;if(session?.user?.id){supabase.from("profiles").select("account_status").eq("id",session.user.id).maybeSingle().then(async({data})=>{if(active&&data?.account_status==="suspended"){await supabase.auth.signOut();setSession(null);}});}return()=>{active=false;};},[session?.user?.id]);
  if(!ready)return <div className="loading-screen"><div className="brand-mark">WAYS<span>S</span></div><p>Entering your orbit...</p></div>;
  if(configError)return <div className="setup-screen"><div className="brand-mark">WAYS<span>S</span></div><h1>Connect your backend</h1><p>Add your Supabase project URL and anon key to <code>.env</code>. Follow the setup guide in README.md, then restart the dev server.</p><code>VITE_SUPABASE_URL<br/>VITE_SUPABASE_ANON_KEY</code></div>;
  if(!session)return <Auth/>;
- return <div className="app-shell"><header className="topbar"><Link to="/" className="wordmark">WAYS<span>S</span></Link><div className="top-actions"><Link to="/orbit">Discover</Link><Link to="/notifications" className="notification-nav" aria-label="Notifications"><Bell size={19}/><span>Notifications</span></Link></div></header>
+ return <div className="app-shell"><header className="topbar"><Link to="/" className="wordmark">WAYS<span>S</span></Link><div className="top-actions"><Link to="/orbit">Discover</Link><Link to="/notifications" className="notification-nav" aria-label="Notifications"><Bell size={19}/><span>Notifications</span>{unread>0&&<i className="nav-unread-count">{unread>99?"99+":unread}</i>}</Link></div></header>
   <Routes>
    <Route path="/" element={<Home userId={session.user.id}/>}/>
    <Route path="/orbit" element={<Orbit userId={session.user.id}/>}/>
