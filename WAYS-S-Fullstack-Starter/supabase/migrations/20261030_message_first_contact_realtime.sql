@@ -76,3 +76,18 @@ with check (
    (r.sender_id=voice_video_calls.callee_id and r.receiver_id=voice_video_calls.caller_id))
   and r.status='accepted')
 );
+
+-- When a request is accepted, promote its single first message into the chat.
+create or replace function public.wayss_seed_accepted_request_message() returns trigger
+language plpgsql security definer set search_path=public
+as $$ begin
+ if old.status='pending' and new.status='accepted' then
+  insert into public.messages(sender_id,receiver_id,body)
+  values(new.sender_id,new.receiver_id,new.initial_message);
+ end if;
+ return new;
+end; $$;
+revoke all on function public.wayss_seed_accepted_request_message() from public, anon, authenticated;
+drop trigger if exists wayss_seed_request_message on public.message_requests;
+create trigger wayss_seed_request_message after update of status on public.message_requests
+for each row execute procedure public.wayss_seed_accepted_request_message();
