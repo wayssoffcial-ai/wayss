@@ -1,14 +1,13 @@
 import { FormEvent, useState } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "../lib/supabase";
-import { uploadMedia } from "../lib/api";
 import { ArrowLeft, Camera, LifeBuoy, Send, X } from "lucide-react";
 
 export default function HelpCenter({userId}:{userId:string}){
  const [issue,setIssue]=useState("");const [file,setFile]=useState<File|null>(null);const [busy,setBusy]=useState(false);const [message,setMessage]=useState("");const [error,setError]=useState("");
  const submit=async(e:FormEvent)=>{e.preventDefault();if(issue.trim().length<8){setError("Please describe the issue in a little more detail.");return;}setBusy(true);setError("");setMessage("");try{
-  let screenshot_url:string|null=null;if(file){if(!file.type.startsWith("image/"))throw new Error("Please attach an image screenshot.");if(file.size>8*1024*1024)throw new Error("Screenshot must be smaller than 8 MB.");screenshot_url=await uploadMedia(file,"help-center");}
-  const {data,error:insertError}=await supabase.from("support_tickets").insert({user_id:userId,description:issue.trim(),screenshot_url}).select("id").single();if(insertError)throw insertError;
+  let screenshot_path:string|null=null;if(file){if(!file.type.startsWith("image/"))throw new Error("Please attach an image screenshot.");if(file.size>8*1024*1024)throw new Error("Screenshot must be smaller than 8 MB.");const ext=file.name.split(".").pop()||"png";screenshot_path=userId+"/"+crypto.randomUUID()+"."+ext;const {error:uploadError}=await supabase.storage.from("support-attachments").upload(screenshot_path,file,{upsert:false,contentType:file.type});if(uploadError)throw uploadError;}
+  const {data,error:insertError}=await supabase.from("support_tickets").insert({user_id:userId,description:issue.trim(),screenshot_path}).select("id").single();if(insertError)throw insertError;
   const {error:mailError}=await supabase.functions.invoke("send-support-ticket",{body:{ticket_id:data.id}});if(mailError)throw new Error("Your issue was saved, but email delivery is not configured yet. Please try again later or contact support through the app.");
   setIssue("");setFile(null);setMessage("Your issue has been sent to WAYS S Support."); 
  }catch(err){setError(err instanceof Error?err.message:"Could not submit your issue.");}finally{setBusy(false);}};
