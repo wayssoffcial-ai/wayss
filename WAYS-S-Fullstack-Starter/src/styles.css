@@ -362,3 +362,6 @@
 .avatar-wrap{position:relative;z-index:4;flex:none}
 .avatar.xl{display:block;object-fit:cover;object-position:center;width:104px;height:104px;flex:none}
 @media(max-width:650px){.avatar.xl{width:82px;height:82px}}
+
+/* Help Center */
+.help-upload{display:flex;align-items:center;gap:12px;padding:14px;border:1px dashed #ffffff35;border-radius:14px;background:#ffffff05}.help-upload input{max-width:100%}.help-file-preview{max-width:100%;max-height:180px;border-radius:12px;object-fit:contain}.support-admin{padding:18px;margin:16px 0}.support-admin h3{margin:0}.support-admin input{width:100%}
