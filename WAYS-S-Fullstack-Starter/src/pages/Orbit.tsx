@@ -1,15 +1,16 @@
 import { useState } from "react";
-import { Search, UserPlus, UserCheck } from "lucide-react";
-import { supabase, Profile } from "../lib/supabase";
-import { followUser } from "../lib/api";
+import { Search,UserPlus,UserCheck,BadgeCheck } from "lucide-react";
+import { supabase,Profile } from "../lib/supabase";
+import { useNavigate } from "react-router-dom";
 
 export default function Orbit({userId}:{userId:string}) {
-  const [query,setQuery]=useState(""); const [results,setResults]=useState<Profile[]>([]); const [following,setFollowing]=useState<string[]>([]); const [searched,setSearched]=useState(false);
-  const search=async()=>{setSearched(true);if(!query.trim()){setResults([]);return;}const {data}=await supabase.from("profiles").select("*").or(`username.ilike.%${query}%,display_name.ilike.%${query}%`).neq("id",userId).limit(25);setResults(data||[]);
-    const ids=(data||[]).map(p=>p.id);if(ids.length){const {data:f}=await supabase.from("follows").select("following_id").eq("follower_id",userId).in("following_id",ids);setFollowing((f||[]).map(x=>x.following_id));}};
-  const toggle=async(id:string)=>{const yes=following.includes(id);await followUser(id,userId,yes);setFollowing(s=>yes?s.filter(x=>x!==id):[...s,id]);};
-  return <div className="page"><span className="eyebrow">FIND YOUR PEOPLE</span><h1>Orbit</h1><div className="search-box"><Search/><input value={query} onChange={e=>setQuery(e.target.value)} onKeyDown={e=>e.key==="Enter"&&search()} placeholder="Search people by name or username"/><button onClick={search}>Search</button></div>
-    <div className="people-list">{results.map(p=><div className="person-row" key={p.id}><img className="avatar" src={p.avatar_url||"/avatar.svg"}/><div className="person-info"><b>{p.display_name}</b><small>@{p.username}</small>{p.identity_line&&<small>{p.identity_line}</small>}</div><button className={following.includes(p.id)?"secondary-btn mini":"primary-btn mini"} onClick={()=>toggle(p.id)}>{following.includes(p.id)?<><UserCheck/> Following</>:<><UserPlus/> Follow</>}</button></div>)}
-    {searched&&results.length===0&&<p className="muted">No people found. Try another search.</p>}</div>
-  </div>;
+ const [query,setQuery]=useState("");const [results,setResults]=useState<Profile[]>([]);const [following,setFollowing]=useState<string[]>([]);const [pending,setPending]=useState<string[]>([]);const [searched,setSearched]=useState(false);const [error,setError]=useState("");const nav=useNavigate();
+ const search=async()=>{setSearched(true);setError("");if(!query.trim()){setResults([]);return;}const {data,error}=await supabase.from("profiles").select("*").or("username.ilike.%"+query.replace(/[,%()]/g,"")+"%,display_name.ilike.%"+query.replace(/[,%()]/g,"")+"%").neq("id",userId).limit(25);if(error){setError(error.message);return;}setResults(data||[]);
+ const ids=(data||[]).map(p=>p.id);if(ids.length){const [{data:f},{data:r}]=await Promise.all([supabase.from("follows").select("following_id").eq("follower_id",userId).in("following_id",ids),supabase.from("follow_requests").select("requested_id").eq("requester_id",userId).eq("status","pending").in("requested_id",ids)]);setFollowing((f||[]).map(x=>x.following_id));setPending((r||[]).map(x=>x.requested_id));}};
+ const toggle=async(p:Profile)=>{setError("");if(following.includes(p.id)){const {error}=await supabase.from("follows").delete().eq("follower_id",userId).eq("following_id",p.id);if(error)setError(error.message);else setFollowing(s=>s.filter(x=>x!==p.id));return;}
+ if(p.is_private){const {error}=await supabase.from("follow_requests").upsert({requester_id:userId,requested_id:p.id,status:"pending"},{onConflict:"requester_id,requested_id"});if(error)setError(error.message);else setPending(s=>[...s,p.id]);return;}
+ const {error}=await supabase.from("follows").insert({follower_id:userId,following_id:p.id});if(error)setError(error.message);else setFollowing(s=>[...s,p.id]);};
+ return <div className="page"><span className="eyebrow">FIND YOUR PEOPLE</span><h1>Orbit</h1><div className="search-box"><Search/><input value={query} onChange={e=>setQuery(e.target.value)} onKeyDown={e=>e.key==="Enter"&&search()} placeholder="Search people by name or username"/><button onClick={search}>Search</button></div>
+ {error&&<p className="form-error">{error}</p>}<div className="people-list">{results.map(p=><div className="person-row" key={p.id}><button className="orbit-profile-link" onClick={()=>nav("/profile/"+p.id)}><img className="avatar" src={p.avatar_url||"/avatar.svg"} alt=""/><span className="person-info"><b>{p.display_name} {p.is_verified&&<BadgeCheck className="verified-badge"/>}{p.ways_verified&&<span className="ways-verified-badge">W</span>}</b><small>@{p.username}</small>{p.identity_line&&<small>{p.identity_line}</small>}</span></button><button className={following.includes(p.id)?"secondary-btn mini":"primary-btn mini"} onClick={()=>toggle(p)}>{following.includes(p.id)?<><UserCheck/> Following</>:pending.includes(p.id)?"Requested":<><UserPlus/> {p.is_private?"Request":"Follow"}</>}</button></div>)}
+ {searched&&results.length===0&&<p className="muted">No people found. Try another search.</p>}</div></div>;
 }
