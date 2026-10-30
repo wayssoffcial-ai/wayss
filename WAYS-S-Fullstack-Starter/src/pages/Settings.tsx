@@ -13,6 +13,7 @@ export default function Settings({userId}:{userId:string}) {
   const [vr,rr,sr,pr]=await Promise.all([
    supabase.from("verification_requests").select("id,user_id,request_type,details,status,created_at,profile:profiles!verification_requests_user_id_fkey(username,display_name,avatar_url)").eq("status","pending").order("created_at",{ascending:false}),
    supabase.from("profile_reports").select("*").in("status",["open","reviewing"]).order("created_at",{ascending:false}),
+   supabase.from("post_reports").select("*").in("status",["open","reviewing"]).order("created_at",{ascending:false}),
    supabase.from("profiles").select("id,username,display_name,account_status,is_verified,ways_verified").order("created_at",{ascending:false}).limit(100)
   ]);
   setRequests((vr.data||[]) as any);setReports((rr.data||[]) as Report[]);setPostReports((sr.data||[]) as PostReport[]);setMembers((pr.data||[]) as Member[]);
