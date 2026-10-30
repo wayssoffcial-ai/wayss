@@ -47,3 +47,54 @@
 .notification-copy{display:block;flex:1;font-size:13px;color:#c7ccd6}.notification-copy b{color:var(--text)}.notification-copy small{display:flex;align-items:center;gap:5px;margin-top:5px;font-size:10px}.unread-dot{width:8px;height:8px;border-radius:50%;background:var(--red);box-shadow:0 0 12px #f32950}.notification-empty svg{color:#ff8298}
 @media(max-width:650px){.quick-screen-content{padding:28px 0}.quick-destinations{grid-template-columns:1fr}.quick-destination{padding:12px}.quick-destination-icon{width:39px;height:39px}.quick-intro{margin:20px 0 14px}.quick-auto-close{margin-top:18px}.quick-close{width:42px;height:42px}.profile-media-tools{grid-template-columns:1fr}.top-actions{gap:12px}.top-actions .notification-nav span{display:none}}
 @media(prefers-reduced-motion:reduce){.quick-screen,.quick-screen-content,.quick-destination,.quick-screen-glow,.quick-auto-close span{animation:none!important;transition:none!important}}
+
+
+/* Reference-matched full-width WAYS S Quick Center */
+.app-shell{padding-bottom:105px}
+.quick-center-shell{position:fixed;z-index:120;left:22px;right:22px;bottom:max(18px,env(safe-area-inset-bottom));display:flex;justify-content:flex-start;align-items:flex-end;pointer-events:none}
+.quick-center-shell>*{pointer-events:auto}
+.quick-logo{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;border:1px solid #ffffff42;background:linear-gradient(145deg,#18283bdc,#080b12f2);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);box-shadow:0 8px 30px #000b,0 0 24px #f3295030;animation:quickLogoPop .38s cubic-bezier(.2,.8,.2,1)}
+.quick-logo span{font:700 25px 'Space Grotesk';background:linear-gradient(120deg,#fff 32%,#f32950);background-clip:text;color:transparent}
+.quick-fullbar{position:relative;width:100%;min-height:76px;padding:9px clamp(12px,3vw,38px);display:grid;grid-template-columns:1fr 1fr 1.12fr 1fr 1fr;align-items:center;justify-items:center;gap:8px;border-radius:30px;border:1px solid #ffffff35;background:linear-gradient(105deg,#121d2beF,#101522f2 55%,#101b2aef);box-shadow:0 15px 48px #000c,0 0 34px #10263b60,inset 0 1px #ffffff15;backdrop-filter:blur(30px) saturate(155%);-webkit-backdrop-filter:blur(30px) saturate(155%);animation:quickBarRise .48s cubic-bezier(.16,1,.3,1)}
+.quick-fullbar:before{content:"";position:absolute;inset:1px;border-radius:29px;pointer-events:none;background:linear-gradient(110deg,#ffffff08,transparent 35%,#ffffff06)}
+.quick-nav-item,.quick-nav-create,.quick-nav-dismiss{position:relative;z-index:1;border:0;background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;color:#c5cfdf;min-width:0}
+.quick-nav-item{width:100%;min-height:56px;font-size:11px}
+.quick-nav-item svg{width:21px;height:21px;stroke-width:1.8}
+.quick-nav-item.active{color:#f32950}
+.quick-nav-item.active svg{fill:#f32950;stroke:#f32950;filter:drop-shadow(0 0 8px #f3295080)}
+.quick-nav-create{width:48px;height:48px;border-radius:50%;background:linear-gradient(145deg,#ff315c,#d90f3a);color:white;box-shadow:0 0 0 5px #f3295017,0 0 28px #f3295080;transition:transform .2s,box-shadow .2s}
+.quick-nav-create svg{width:27px;height:27px;stroke-width:2}
+.quick-nav-create:hover{transform:scale(1.08);box-shadow:0 0 0 7px #f3295020,0 0 34px #f32950a0}
+.quick-nav-create.active{transform:rotate(45deg)}
+.quick-nav-dismiss{display:none}
+.quick-create-popover{position:absolute;left:50%;bottom:calc(100% + 12px);transform:translateX(-50%);width:min(365px,calc(100vw - 44px));padding:16px 17px 13px;border:1px solid #ffffff3c;border-radius:25px;background:linear-gradient(145deg,#142235f5,#0c111cf7);box-shadow:0 18px 50px #000c,0 0 28px #10263b55;backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);animation:quickCreateRise .28s cubic-bezier(.16,1,.3,1)}
+.quick-create-heading{text-align:center;font:600 14px 'Space Grotesk';margin-bottom:13px}.quick-create-heading span{color:var(--red)}
+.quick-create-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.quick-create-actions button{border:0;background:transparent;display:grid;justify-items:center;gap:7px;padding:5px;color:#f5f5f7;font-size:12px}
+.quick-create-actions i{width:55px;height:55px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#1b293d,#111724);border:1px solid #ffffff13;box-shadow:inset 0 1px #ffffff0b,0 5px 18px #0005;color:var(--red)}
+.quick-create-actions svg{width:23px;height:23px}
+@keyframes quickBarRise{0%{opacity:0;transform:translateY(30px) scaleX(.94);filter:blur(8px)}65%{opacity:1;filter:blur(0)}100%{transform:translateY(0) scaleX(1)}}
+@keyframes quickCreateRise{from{opacity:0;transform:translate(-50%,14px) scale(.94);filter:blur(6px)}to{opacity:1;transform:translate(-50%,0) scale(1);filter:blur(0)}}
+@keyframes quickLogoPop{from{opacity:0;transform:scale(.72)}to{opacity:1;transform:scale(1)}}
+/* Keep feed surfaces in the same restrained glass / midnight visual system */
+.feed-page{max-width:760px}
+.feed-page .page-heading{padding:18px 20px;margin-bottom:20px;border:1px solid #ffffff13;border-radius:22px;background:linear-gradient(120deg,#111925c9,#101116a8);box-shadow:0 12px 35px #0004;backdrop-filter:blur(16px)}
+.feed-page .page-heading h1{margin:5px 0 0;font-size:30px}
+.feed-page .feed-list{max-width:620px;margin:0 auto;gap:22px}
+.feed-page .post-card{border-radius:23px;background:linear-gradient(145deg,#121a26f2,#0d1017f5);border-color:#ffffff1b;box-shadow:0 15px 42px #0005;overflow:hidden}
+.feed-page .post-head{padding:16px 17px}
+.feed-page .post-media{max-height:600px;object-fit:cover}
+.feed-page .post-actions{padding:14px 17px}
+.feed-page .empty-state{padding:72px 24px;border:1px solid #ffffff15;border-radius:24px;background:linear-gradient(145deg,#121b28,#0d1017)}
+@media(max-width:650px){
+ .quick-center-shell{left:12px;right:12px;bottom:max(12px,env(safe-area-inset-bottom))}
+ .quick-fullbar{min-height:70px;padding:7px 9px;gap:2px;border-radius:25px}
+ .quick-fullbar:before{border-radius:24px}
+ .quick-nav-item{min-height:53px;font-size:10px;gap:4px}
+ .quick-nav-item svg{width:19px;height:19px}
+ .quick-nav-create{width:44px;height:44px}
+ .quick-logo{width:52px;height:52px}
+ .feed-page .page-heading{padding:15px}
+ .feed-page .page-heading h1{font-size:27px}
+}
+@media(prefers-reduced-motion:reduce){.quick-fullbar,.quick-create-popover,.quick-logo{animation:none!important}}
