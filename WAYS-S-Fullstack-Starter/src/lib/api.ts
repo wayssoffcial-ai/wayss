@@ -39,3 +39,16 @@ export async function followUser(targetId: string, userId: string, following: bo
     if (error) throw error;
   }
 }
+export async function uploadChatMedia(file: File, senderId: string, receiverId: string) {
+  const ext = file.name.split(".").pop() || "bin";
+  const path = `${senderId}/${receiverId}/${crypto.randomUUID()}.${ext}`;
+  const { error } = await supabase.storage.from("ways-chat").upload(path, file, { upsert: false });
+  if (error) throw error;
+  return path;
+}
+
+export async function signChatMedia(path: string) {
+  const { data, error } = await supabase.storage.from("ways-chat").createSignedUrl(path, 60 * 60);
+  if (error) throw error;
+  return data.signedUrl;
+}
