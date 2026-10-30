@@ -195,3 +195,5 @@
 .incoming-call>div{display:flex;gap:12px}
 .record-controls{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
 @media(max-width:600px){.call-card{padding:13px;border-radius:20px}.remote-video{min-height:190px}}
+
+.orbit-profile-link{display:flex;align-items:center;gap:12px;flex:1;min-width:0;text-align:left;border:0;background:transparent;color:inherit;cursor:pointer}.orbit-profile-link .person-info b{display:flex;align-items:center;gap:5px}
