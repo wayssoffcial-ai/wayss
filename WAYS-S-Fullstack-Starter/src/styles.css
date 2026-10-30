@@ -382,3 +382,61 @@
 .help-form textarea{width:100%;resize:vertical}
 .help-file-name{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:12px}
 .help-file-name button{border:0;background:none;color:var(--muted)}
+
+/* Global scroll reliability */
+html{min-height:100%;height:auto;overflow-y:auto;overscroll-behavior-y:auto}
+body{min-height:100%;height:auto;overflow-x:hidden;overflow-y:auto;overscroll-behavior-y:auto}
+#root{min-height:100vh;height:auto;overflow:visible}
+.app-shell{min-height:100vh;height:auto;overflow:visible}
+.page{height:auto;overflow:visible}
+.settings-page{padding-bottom:calc(150px + env(safe-area-inset-bottom))}
+.settings-page .settings-group{margin:18px 0}
+.settings-page .settings-signout{width:100%;min-height:68px;display:flex;align-items:center;justify-content:space-between;text-align:left;padding:16px 18px;cursor:pointer;pointer-events:auto}
+.settings-page .settings-signout span{display:grid;gap:5px}
+.profile-menu{pointer-events:auto}
+.profile-menu button{cursor:pointer;pointer-events:auto;text-align:left}
+.profile-menu button:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+
+/* WAYS S welcome animation */
+.wayss-welcome{position:fixed;inset:0;z-index:2000;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;background:radial-gradient(ellipse at 50% 44%,#10263b 0%,#08090d 54%,#030408 100%);color:#f5f5f7;animation:welcomeFade 1.8s ease both}
+.wayss-welcome:before,.wayss-welcome:after{content:"";position:absolute;width:68vmax;height:68vmax;border:1px solid #f3295020;border-radius:50%;animation:welcomePulse 1.8s ease-out both}
+.wayss-welcome:after{border-color:#55aaff20;animation-delay:.25s}
+.welcome-orbit{position:relative;width:170px;height:170px;display:grid;place-items:center;margin-bottom:25px}
+.welcome-ring{position:absolute;inset:4px;border:1px solid #f32950a0;border-radius:50%;box-shadow:0 0 28px #f3295030;animation:welcomeSpin 2.1s linear infinite}
+.welcome-ring:before{content:"";position:absolute;top:14px;left:24px;width:8px;height:8px;border-radius:50%;background:#f32950;box-shadow:0 0 18px #f32950}
+.welcome-ring-b{inset:23px;border-color:#55aaff99;transform:rotateX(62deg);animation-direction:reverse;animation-duration:1.6s}
+.welcome-logo{width:82px;height:82px;display:grid;place-items:center;border-radius:27px;background:linear-gradient(145deg,#f32950,#a81036 58%,#10263b);font:700 31px 'Space Grotesk';box-shadow:0 0 60px #f3295066;animation:welcomeCore .9s ease-in-out infinite alternate}
+.welcome-logo span{color:#d8edff}
+.welcome-star{position:absolute;width:5px;height:5px;border-radius:50%;background:#fff;box-shadow:0 0 13px #55aaff;animation:welcomeTwinkle .65s ease-in-out infinite alternate}
+.welcome-star.star-a{top:5px;right:25px}.welcome-star.star-b{bottom:20px;left:7px;animation-delay:.2s}.welcome-star.star-c{bottom:8px;right:30px;animation-delay:.4s}
+.welcome-wordmark{font:700 29px 'Space Grotesk';letter-spacing:-1.5px}.welcome-wordmark span{color:var(--red)}
+.wayss-welcome>p{margin:9px 0 0 5px;font-size:9px;font-weight:700;letter-spacing:.38em;color:#aeb8c8}
+@keyframes welcomeFade{0%{opacity:0}12%,82%{opacity:1}100%{opacity:0}}
+@keyframes welcomePulse{0%{transform:scale(.2);opacity:.65}100%{transform:scale(1.2);opacity:0}}
+@keyframes welcomeSpin{to{transform:rotate(360deg)}}
+@keyframes welcomeCore{to{transform:scale(1.06);box-shadow:0 0 82px #f3295090}}
+@keyframes welcomeTwinkle{to{opacity:.2;transform:scale(.5)}}
+@media(prefers-reduced-motion:reduce){.wayss-welcome,.wayss-welcome *,.wayss-welcome:before,.wayss-welcome:after{animation:none!important}.wayss-welcome{opacity:1}}
+
+/* Call overlay and media layout */
+.call-overlay{position:fixed;inset:0;z-index:1500;display:grid;place-items:center;padding:18px;background:#02040bdc;backdrop-filter:blur(16px);overflow-y:auto}
+.call-card{width:min(480px,100%);max-height:min(92vh,820px);overflow:auto;padding:22px;border-radius:26px;border:1px solid #ffffff2b;background:linear-gradient(145deg,#172130,#0b0e15);box-shadow:0 25px 90px #000c;display:flex;flex-direction:column;gap:16px}
+.call-card>header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.call-card>header h2{margin:5px 0;font:600 22px 'Space Grotesk'}
+.call-card>header button{width:38px;height:38px;display:grid;place-items:center;border:1px solid var(--border);border-radius:50%;background:#ffffff0a}
+.call-start,.incoming-call{display:grid;justify-items:center;gap:14px;padding:28px 10px;text-align:center}
+.call-start .primary-btn,.call-start .secondary-btn{min-width:190px}
+.incoming-call>img{width:90px;height:90px;border-radius:50%;object-fit:cover;border:3px solid #f32950}
+.incoming-call>div{display:flex;gap:12px}
+.call-pulse{width:86px;height:86px;border-radius:50%;display:grid;place-items:center;background:#f3295022;color:#ff8298;box-shadow:0 0 0 12px #f3295010;animation:callPulse 1.5s ease-in-out infinite}
+.call-pulse svg{width:32px;height:32px}
+.remote-video{width:100%;max-height:52vh;min-height:220px;object-fit:contain;border-radius:18px;background:#030509}
+.remote-video.audio-only{display:none}
+.call-controls{display:flex;justify-content:center;align-items:center;gap:18px}
+.call-controls button{width:50px;height:50px;display:grid;place-items:center;border:1px solid #ffffff2c;border-radius:50%;background:#ffffff12}
+.call-controls .hangup{background:#e3264d;border-color:#e3264d}
+.record-controls{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+.call-card .form-error{color:#ff9eaf;font-size:13px;line-height:1.5}
+.call-card>.muted{font-size:11px;text-align:center;line-height:1.5}
+@keyframes callPulse{50%{transform:scale(1.07);box-shadow:0 0 0 20px #f3295008}}
+@media(max-width:600px){.call-overlay{padding:10px;align-items:center}.call-card{padding:18px;border-radius:22px}.remote-video{min-height:180px}.settings-page{padding-bottom:calc(170px + env(safe-area-inset-bottom))}}
