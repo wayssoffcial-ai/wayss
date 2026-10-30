@@ -202,7 +202,7 @@ export default function Profile({ userId }: { userId: string }) {
           <button onClick={() => { setMenu(false); setEditing(true); }}><Pencil/> Edit profile</button>
           <button onClick={() => { setMenu(false); resetSectionForm(); setSectionOpen(true); }}><Plus/> Add bio / custom section</button>
           <button onClick={() => { setMenu(false); setRequestsOpen(true); }}><UserRound/> Follow requests</button>
-          <Link to="/settings" onClick={() => setMenu(false)}><SettingsIcon/> Settings</Link>
+          <button type="button" onClick={() => { setMenu(false); navigate("/settings"); }}><SettingsIcon/> Settings</button>
           <button onClick={() => { setMenu(false); setAboutOpen(true); }}><ShieldCheck/> About this account</button>
           <button onClick={shareProfile}><Share2/> Share profile</button>
         </> : <>
