@@ -209,3 +209,22 @@
 :root[data-interface="3d"] .panel,:root[data-interface="3d"] .post-card,:root[data-interface="3d"] .custom-section{box-shadow:0 18px 42px #0005,0 3px 0 #ffffff12 inset;transform:perspective(1200px) translateZ(0);transition:transform .25s ease,box-shadow .25s ease}
 :root[data-interface="3d"] .panel:hover,:root[data-interface="3d"] .post-card:hover{transform:perspective(1200px) translateY(-3px) rotateX(.35deg);box-shadow:0 24px 50px #0006,0 3px 0 #ffffff16 inset}
 @media(prefers-color-scheme:light){:root[data-theme="system"]{--bg:#eef2f7;--text:#101827;--muted:#64748b;--card:#fff;--elev:#f5f7fb;--border:#d6deea;color:var(--text);background:var(--bg)}:root[data-theme="system"] body{background:#eef2f7;color:var(--text)}}
+
+
+/* WAYS S media and inbox polish */
+.cover-edit{width:38px;height:38px;min-width:38px;padding:0!important;display:grid!important;place-items:center;border-radius:50%!important;background:#08090dcc!important;border:1px solid #ffffff55!important;backdrop-filter:blur(14px);overflow:hidden}
+.cover-edit span{display:none!important}
+.cover-edit input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}
+.post-media{display:block;width:100%;max-height:720px;object-fit:cover;background:#08090D;user-select:none;-webkit-user-drag:none}
+.post-card video::-webkit-media-controls-download-button{display:none!important}
+.post-card video::-webkit-media-controls-enclosure{overflow:hidden}
+.post-card video{outline:none}
+.inbox-tabs{display:flex;gap:8px;padding:5px;margin:12px 0 16px;border:1px solid #ffffff16;border-radius:15px;background:#ffffff06;width:max-content;max-width:100%}
+.inbox-tabs button{border:0;border-radius:11px;padding:9px 18px;background:transparent;color:#aeb5c2;font-weight:650;cursor:pointer}
+.inbox-tabs button.active{background:#F32950;color:#fff;box-shadow:0 5px 18px #F3295030}
+.inbox-tabs i{font-style:normal;margin-left:5px;padding:2px 6px;border-radius:20px;background:#fff2;color:inherit;font-size:10px}
+.request-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:10px;border-bottom:1px solid #ffffff12}
+.request-row>b{flex:1;min-width:70px}
+.request-row>small{width:100%;padding-left:54px;color:#9296A3}
+.request-row>button{border:1px solid #F32950;border-radius:10px;background:#F32950;color:white;padding:7px 10px;font-size:11px;cursor:pointer}
+.request-row>button.secondary-btn{background:#ffffff0a;border-color:#ffffff25;color:#d8dce5}
