@@ -8,13 +8,15 @@ import FollowRequests from "../components/FollowRequests";
 import {
   MoreHorizontal, ArrowLeft, MapPin, Plus, Settings as SettingsIcon, Share2, Flag, Lock,
   Pencil, Trash2, Globe, Check, X, ExternalLink, ImagePlus, UserRound, Link2,
-  ShieldCheck, UserX, FileText
+  ShieldCheck, UserX, FileText, BadgeCheck, Sparkles
 } from "lucide-react";
 
 type SectionLink = { label: string; url: string };
 type Section = { id: string; title: string; description: string; color: string; links: SectionLink[]; sort_order?: number };
 const PALETTE = ["#F32950", "#10263B", "#55AAFF", "#A78BFA", "#22C58B", "#F5B942", "#F5F5F7"];
-const validUrl = (value: string) => {
+
+function WaysVerificationBadge({large=false}:{large?:boolean}) { return <span className={large?"ways-orbit-badge ways-orbit-badge-large":"ways-orbit-badge"} role="img" aria-label="WAYS S verified"><svg viewBox="0 0 28 28" aria-hidden="true"><defs><linearGradient id="waysBadgeGradient" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#ff7891"/><stop offset=".52" stopColor="#F32950"/><stop offset="1" stopColor="#10263B"/></linearGradient></defs><path d="M14 1.8 17.2 3l3.5-.2 1.8 2.9 3 1.8-.2 3.5 1.2 3-1.2 3 .2 3.5-3 1.8-1.8 2.9-3.5-.2-3.2 1.2-3.2-1.2-3.5.2-1.8-2.9-3-1.8.2-3.5-1.2-3 1.2-3-.2-3.5 3-1.8 1.8-2.9 3.5.2z" fill="url(#waysBadgeGradient)" stroke="#ff9bad" strokeWidth=".7"/><path d="m7.8 14.3 3.8 3.7 8.4-8.1" fill="none" stroke="#fff" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round"/><circle cx="21.8" cy="5.7" r="2" fill="#fff" stroke="#F32950" strokeWidth=".8"/></svg><Sparkles size={8} className="ways-badge-spark"/></span> }
+\nconst validUrl = (value: string) => {
   try { const url = new URL(value); return url.protocol === "https:" || url.protocol === "http:"; }
   catch { return false; }
 };
@@ -229,8 +231,8 @@ export default function Profile({ userId }: { userId: string }) {
           </>}
         </div>
       </div>
-      <h1>{profile.display_name} {profile.is_verified && <ShieldCheck className="verified-badge profile-verified" aria-label="Verified account"/>} {profile.ways_verified && <span className="ways-verified-badge profile-ways-badge">W</span>}</h1>
-      <p className="muted profile-handle">@{profile.username} {profile.is_verified && <ShieldCheck className="verified-badge" aria-label="Verified"/>} {profile.ways_verified && <span className="ways-verified-badge">W</span>}</p>
+      <h1>{profile.display_name} {profile.is_verified && <BadgeCheck className="verified-badge profile-verified" aria-label="Verified account"/>} {profile.ways_verified && <WaysVerificationBadge large/>}</h1>
+      <p className="muted profile-handle">@{profile.username} {profile.is_verified && <BadgeCheck className="verified-badge" aria-label="Verified"/>} {profile.ways_verified && <WaysVerificationBadge/>}</p>
       {profile.identity_line && <p className="identity">{profile.identity_line}</p>}
       {profile.bio && <p className="profile-bio">{profile.bio}</p>}
       <div className="stats">
