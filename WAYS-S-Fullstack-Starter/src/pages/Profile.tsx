@@ -232,8 +232,8 @@ export default function Profile({ userId }: { userId: string }) {
           </>}
         </div>
       </div>
-      <h1>{profile.display_name} {profile.is_verified && <StandardVerificationBadge large/>} {profile.ways_verified && <WaysVerificationBadge large/>}</h1>
-      <p className="muted profile-handle">@{profile.username} {profile.is_verified && <StandardVerificationBadge/>} {profile.ways_verified && <WaysVerificationBadge/>}</p>
+      <h1>{profile.display_name} {profile.ways_verified ? <WaysVerificationBadge large/> : profile.is_verified ? <StandardVerificationBadge large/> : null}</h1>
+      <p className="muted profile-handle">@{profile.username} {profile.ways_verified ? <WaysVerificationBadge/> : profile.is_verified ? <StandardVerificationBadge/> : null}</p>
       {profile.identity_line && <p className="identity">{profile.identity_line}</p>}
       {profile.bio && <p className="profile-bio">{profile.bio}</p>}
       <div className="stats">
