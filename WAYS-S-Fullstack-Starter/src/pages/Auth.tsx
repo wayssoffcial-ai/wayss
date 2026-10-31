@@ -30,30 +30,30 @@ export default function Auth() {
   try{
    if(mode==="forgot"){
     const value=identifier.trim();
-    if(!value.includes("@"))throw new Error("Password reset ke liye registered email address enter karo.");
+    if(!value.includes("@"))throw new Error("Enter your registered email address to reset your password.");
     const {error}=await supabase.auth.resetPasswordForEmail(value,{redirectTo:window.location.origin});
-    if(error)throw error;setNotice("Password reset link sent. Email inbox aur spam folder check karo.");
+    if(error)throw error;setNotice("Password reset link sent. Check your email inbox and spam folder.");
    }else if(mode==="reset"){
-    if(password.length<8)throw new Error("Password kam se kam 8 characters ka hona chahiye.");
-    if(password!==confirm)throw new Error("Passwords match nahi kar rahe.");
+    if(password.length<8)throw new Error("Password must be at least 8 characters long.");
+    if(password!==confirm)throw new Error("Passwords do not match.");
     const {error}=await supabase.auth.updateUser({password});if(error)throw error;
-    setNotice("Password successfully update ho gaya. Ab sign in kar sakte ho.");setPassword("");setConfirm("");setMode("login");
+    setNotice("Password updated successfully. You can now sign in.");setPassword("");setConfirm("");setMode("login");
    }else if(mode==="verify"){
-    if(!/^\d{6}$/.test(otp))throw new Error("6-digit verification code enter karo.");
+    if(!/^\d{6}$/.test(otp))throw new Error("Enter the 6-digit verification code.");
     const {data,error}=await supabase.auth.verifyOtp({email:email.trim(),token:otp,type:"email"});
     if(error)throw error;
     if(data.user){await ensureProfile(data.user);nav("/");}
    }else if(mode==="signup"){
-    if(!fullName.trim())throw new Error("Full name enter karo.");
+    if(!fullName.trim())throw new Error("Please enter your full name.");
     if(availability!=="available")throw new Error("Please choose an available username.");
-    if(password.length<8)throw new Error("Password kam se kam 8 characters ka hona chahiye.");
-    if(password!==confirm)throw new Error("Passwords match nahi kar rahe.");
-    if(!terms)throw new Error("Continue karne ke liye Terms & Conditions accept karo.");
+    if(password.length<8)throw new Error("Password must be at least 8 characters long.");
+    if(password!==confirm)throw new Error("Passwords do not match.");
+    if(!terms)throw new Error("Please accept the Terms & Conditions to continue.");
     const normalizedPhone=phone.trim();
     const {data,error}=await supabase.auth.signUp({email:email.trim(),password,options:{emailRedirectTo:window.location.origin, data:{username:username.trim().toLowerCase(),display_name:fullName.trim(),full_name:fullName.trim(),phone:normalizedPhone||null}}});
     if(error)throw error;
     if(data.user&&data.session){await ensureProfile(data.user);nav("/");}
-    else{setNotice("Account create ho gaya. Email verification link open karke account confirm karo.");setMode("login");}
+    else{setNotice("Confirmation link sent. Check your email to verify your account.");setMode("login");}
    }else{
     const value=identifier.trim();
     if(value.startsWith("+")||/^\d{8,}$/.test(value)){
@@ -63,14 +63,14 @@ export default function Auth() {
       const {data,error}=await supabase.auth.signInWithPassword({email:value,password});if(error)throw error;
       if(data.user){await ensureProfile(data.user);nav("/");}
     }else{
-      throw new Error("Abhi email ya verified phone number se sign in karo. Username login ko secure backend lookup ke saath enable karna hoga.");
+      throw new Error("Sign in with your email address or verified phone number.");
     }
    }
   }catch(err){
    const raw=err instanceof Error?err.message:"Something went wrong";const lower=raw.toLowerCase();
-   if(lower.includes("over_email_send_rate_limit")||lower.includes("email rate limit")||lower.includes("too many requests"))setError("Email sending limit reached. Custom SMTP configure hone tak thoda wait karke try karo.");
+   if(lower.includes("over_email_send_rate_limit")||lower.includes("email rate limit")||lower.includes("too many requests"))setError("Email sending limit reached. Please wait a moment and try again.");
    else if(lower.includes("user already registered"))setError("This email already has an account. Sign in or use Forgot password.");
-   else if(lower.includes("invalid login credentials"))setError("Email/phone ya password sahi nahi hai.");
+   else if(lower.includes("invalid login credentials"))setError("The email/phone number or password is incorrect.");
    else setError(raw);
   }finally{setBusy(false);}
  };
