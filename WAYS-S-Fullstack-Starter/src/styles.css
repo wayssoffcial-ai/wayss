@@ -635,3 +635,10 @@ img,video,canvas,svg{max-width:100%}
 .standard-verification-badge svg{width:100%;height:100%;display:block}
 .standard-verification-badge-large{width:27px;height:27px;vertical-align:-7px}
 .profile-handle .standard-verification-badge{width:18px;height:18px;vertical-align:-4px}
+
+/* Flux player controls appear only briefly after interaction */
+.ways-video-shell .video-center-control,.ways-video-shell .video-app-controls{opacity:0;pointer-events:none;transition:opacity .16s ease}
+.ways-video-shell.controls-visible .video-center-control,.ways-video-shell.controls-visible .video-app-controls{opacity:1;pointer-events:auto}
+.ways-video-shell:hover .video-center-control,.ways-video-shell:focus-within .video-center-control,.ways-video-shell:hover .video-app-controls,.ways-video-shell:focus-within .video-app-controls{opacity:0;pointer-events:none}
+.ways-video-shell.controls-visible:focus-within .video-center-control,.ways-video-shell.controls-visible:focus-within .video-app-controls{opacity:1;pointer-events:auto}
+@media(hover:none){.ways-video-shell .video-center-control,.ways-video-shell .video-app-controls{opacity:0;pointer-events:none}.ways-video-shell.controls-visible .video-center-control,.ways-video-shell.controls-visible .video-app-controls{opacity:1;pointer-events:auto}}
