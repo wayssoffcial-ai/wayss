@@ -78,7 +78,7 @@ export default function Auth() {
  const title=mode==="login"?"Welcome back":mode==="signup"?"Create your account":mode==="forgot"?"Reset your password":mode==="reset"?"Choose a new password":"Verify your email";
  const changeMode=(next:Mode)=>{setMode(next);clear();setPassword("");setConfirm("");};
  return <main className="auth-page"><form className="auth-card auth-card-modern" onSubmit={submit}>
-  <div className="brand-mark"><Orbit/><strong>WAY<span>S</span></strong></div><p className="eyebrow">YOUR WORLD. YOUR ORBIT.</p><h1>{title}</h1>
+  <div className="brand-mark"><Orbit/><strong>WAYS<span>S</span></strong></div><p className="eyebrow">YOUR WORLD. YOUR ORBIT.</p><h1>{title}</h1>
   <p className="muted">{mode==="signup"?"Create your identity and join your orbit.":mode==="forgot"?"We'll send a secure password reset link to your registered email.":mode==="reset"?"Choose a strong new password for your account.":mode==="verify"?"Enter the 6-digit code sent to your email address.":"A space to share what makes you, you."}</p>
   {mode==="signup"&&<>
    <label className="auth-field-label">Full name<input required autoComplete="name" maxLength={60} value={fullName} onChange={e=>setFullName(e.target.value)} placeholder="Your full name"/></label>
