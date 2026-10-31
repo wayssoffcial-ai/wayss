@@ -13,7 +13,7 @@ import Profile from "./pages/Profile";
 import Messages from "./pages/Messages";
 import Settings from "./pages/Settings";
 import Notifications from "./pages/Notifications";
-import { Bell, Settings as SettingsIcon } from "lucide-react";
+import { Bell } from "lucide-react";
 
 export default function App() {
  const [session,setSession]=useState<any>(null);const [ready,setReady]=useState(false);const [welcome,setWelcome]=useState(true);const [configError,setConfigError]=useState(false);const [unread,setUnread]=useState(0);
@@ -29,7 +29,7 @@ export default function App() {
  if(!ready)return <div className="loading-screen"><div className="brand-mark">WAYS<span>S</span></div><p>Entering your orbit...</p></div>;
  if(configError)return <div className="setup-screen"><div className="brand-mark">WAYS<span>S</span></div><h1>Connect your backend</h1><p>Add your Supabase project URL and anon key to <code>.env</code>. Follow the setup guide in README.md, then restart the dev server.</p><code>VITE_SUPABASE_URL<br/>VITE_SUPABASE_ANON_KEY</code></div>;
  if(!session)return <Auth/>;
- return <div className="app-shell"><header className="topbar"><Link to="/" className="wordmark">WAYS<span>S</span></Link><div className="top-actions"><Link to="/settings" className="settings-nav" aria-label="Settings"><SettingsIcon size={19}/><span>Settings</span></Link><Link to="/notifications" className="notification-nav" aria-label="Notifications"><Bell size={19}/><span>Notifications</span>{unread>0&&<i className="nav-unread-count">{unread>99?"99+":unread}</i>}</Link></div></header>
+ return <div className="app-shell"><header className="topbar"><Link to="/" className="wordmark">WAYS<span>S</span></Link><div className="top-actions"><Link to="/notifications" className="notification-nav" aria-label="Notifications"><Bell size={19}/><span>Notifications</span>{unread>0&&<i className="nav-unread-count">{unread>99?"99+":unread}</i>}</Link></div></header>
   <Routes>
    <Route path="/" element={<Home userId={session.user.id}/>}/>
    <Route path="/orbit" element={<Orbit userId={session.user.id}/>}/>
