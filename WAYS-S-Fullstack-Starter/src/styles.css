@@ -588,3 +588,27 @@ img,video,canvas,svg{max-width:100%}
 .top-actions{display:flex;align-items:center;gap:18px}
 .settings-nav{padding:8px 10px;border:1px solid #ffffff16;border-radius:11px;background:#ffffff08}
 @media(max-width:600px){.create-form{padding:14px}.create-page-top{margin-bottom:20px}.media-dropzone{min-height:165px}.create-file-preview{grid-template-columns:108px minmax(0,1fr);gap:10px}.create-file-preview>img,.create-file-preview>video{height:92px}.settings-nav span{display:none}.top-actions{gap:8px}}
+
+/* Authentication refresh */
+.auth-card-modern{gap:12px}
+.auth-field-label{display:grid;gap:7px;color:#dce1eb;font-size:12px;font-weight:600}
+.auth-field-label>small{display:inline;color:#9296a3;font-weight:400}
+.auth-field-label>input,.auth-password-wrap>input{width:100%;min-width:0}
+.auth-password-wrap{display:flex;align-items:center;position:relative}
+.auth-password-wrap>input{padding-right:46px}
+.auth-password-wrap>button{position:absolute;right:8px;width:34px;height:34px;display:grid;place-items:center;border:0;background:transparent;color:#9296a3}
+.auth-login-options{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.auth-check{display:flex;align-items:flex-start;gap:9px;color:#aeb5c3;font-size:11px;line-height:1.5}
+.auth-check input{width:15px;height:15px;accent-color:#f32950;margin:0;flex:0 0 auto}
+.auth-text-link{justify-self:end;background:none;border:0;color:#ff7891;font-size:12px;padding:3px}
+.password-strength{display:flex;align-items:center;gap:10px}
+.password-strength-bars{display:flex;gap:5px;flex:1}
+.password-strength-bars i{height:4px;flex:1;border-radius:9px;background:#343945}
+.password-strength-bars i.filled{background:#f32950}
+.password-strength>small{font-size:10px;min-width:80px;text-align:right}
+.auth-divider{display:flex;align-items:center;gap:12px;color:#737b8b;font-size:11px}
+.auth-divider:before,.auth-divider:after{content:"";height:1px;background:#ffffff16;flex:1}
+.auth-security-note{display:flex;align-items:center;justify-content:center;gap:6px;color:#8992a2;font-size:10px;margin:0}
+.profile-menu a{width:100%;display:flex;align-items:center;gap:10px;padding:11px;border:0;background:none;text-align:left;border-radius:8px;color:inherit;font-size:inherit}
+.profile-menu a:hover{background:#ffffff0d}
+@media(max-width:480px){.auth-card{padding:25px 20px;border-radius:21px}.auth-card h1{font-size:29px}.auth-login-options{align-items:flex-start}}
