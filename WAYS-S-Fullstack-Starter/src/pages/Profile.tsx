@@ -15,6 +15,7 @@ type SectionLink = { label: string; url: string };
 type Section = { id: string; title: string; description: string; color: string; links: SectionLink[]; sort_order?: number };
 const PALETTE = ["#F32950", "#10263B", "#55AAFF", "#A78BFA", "#22C58B", "#F5B942", "#F5F5F7"];
 
+function StandardVerificationBadge({large=false}:{large?:boolean}) { return <span className={large?"standard-verification-badge standard-verification-badge-large":"standard-verification-badge"} role="img" aria-label="Verified account"><svg viewBox="0 0 48 48" aria-hidden="true"><defs><linearGradient id="standardVerifyBlue" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#27B7F5"/><stop offset="1" stopColor="#0865DE"/></linearGradient></defs><path d="M24 1.8c3.8 0 6.4 5.2 9.8 5.8 3.5.6 8.1-2.8 11.1-.6 3 2.2 1.1 7.7 2.4 11 1.3 3.3 6.7 6.2 6.1 9.8-.6 3.5-6.5 4.5-8.5 7.5-2 3-1.1 8.8-4.4 10.4-3.3 1.6-7.5-2.4-11.1-2.4s-7.8 4-11.1 2.4c-3.3-1.6-2.4-7.4-4.4-10.4-2-3-7.9-4-8.5-7.5-.6-3.6 4.8-6.5 6.1-9.8 1.3-3.3-.6-8.8 2.4-11 3-2.2 7.6 1.2 11.1.6C17.6 7 20.2 1.8 24 1.8Z" transform="translate(-3 -2) scale(1.08)" fill="url(#standardVerifyBlue)"/><path d="m14.5 24.5 6.3 6.2 13.1-13" fill="none" stroke="#fff" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round"/></svg></span> }
 function WaysVerificationBadge({large=false}:{large?:boolean}) { return <span className={large?"ways-orbit-badge ways-orbit-badge-large":"ways-orbit-badge"} role="img" aria-label="WAYSS verified"><svg viewBox="0 0 32 32" aria-hidden="true"><defs><linearGradient id="waysSapphire" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#B9F3FF"/><stop offset=".38" stopColor="#35C7FF"/><stop offset=".72" stopColor="#2878F0"/><stop offset="1" stopColor="#173B9B"/></linearGradient><linearGradient id="waysOrbitLine" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#E5FCFF"/><stop offset="1" stopColor="#4A9DFF"/></linearGradient></defs><path d="M16 1.5 19.1 3l3.5-.4 1.9 3 3.2 1.7-.2 3.6 1.5 3.1-1.5 3.1.2 3.6-3.2 1.7-1.9 3-3.5-.4L16 29.5l-3.1-1.5-3.5.4-1.9-3-3.2-1.7.2-3.6L3 17l1.5-3.1-.2-3.6 3.2-1.7 1.9-3 3.5.4z" fill="url(#waysSapphire)" stroke="#B9F3FF" strokeWidth=".8"/><ellipse cx="16" cy="15.5" rx="11.4" ry="5.4" transform="rotate(-32 16 15.5)" fill="none" stroke="url(#waysOrbitLine)" strokeWidth="1.25"/><path d="m9.4 15.9 4.1 4 8.8-9" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/><circle cx="25.1" cy="6.5" r="2.2" fill="#E8FCFF" stroke="#2589FF" strokeWidth=".9"/></svg><span className="ways-badge-glint"/></span> }
 const validUrl = (value: string) => {
   try { const url = new URL(value); return url.protocol === "https:" || url.protocol === "http:"; }
@@ -231,8 +232,8 @@ export default function Profile({ userId }: { userId: string }) {
           </>}
         </div>
       </div>
-      <h1>{profile.display_name} {profile.is_verified && <BadgeCheck className="verified-badge profile-verified" aria-label="Verified account"/>} {profile.ways_verified && <WaysVerificationBadge large/>}</h1>
-      <p className="muted profile-handle">@{profile.username} {profile.is_verified && <BadgeCheck className="verified-badge" aria-label="Verified"/>} {profile.ways_verified && <WaysVerificationBadge/>}</p>
+      <h1>{profile.display_name} {profile.is_verified && <StandardVerificationBadge large/>} {profile.ways_verified && <WaysVerificationBadge large/>}</h1>
+      <p className="muted profile-handle">@{profile.username} {profile.is_verified && <StandardVerificationBadge/>} {profile.ways_verified && <WaysVerificationBadge/>}</p>
       {profile.identity_line && <p className="identity">{profile.identity_line}</p>}
       {profile.bio && <p className="profile-bio">{profile.bio}</p>}
       <div className="stats">
